@@ -76,37 +76,6 @@ if ($prt_res) {
     }
 }
 
-// 2. Borrow requests schedules (all users)
-$brw_res = $conn->query("
-    SELECT r.request_group_id, r.requisitioner_name, r.department, r.borrow_date, r.expected_return_date, r.scheduled_time, r.quantity, r.status,
-           IFNULL(i.item_name, r.item_name) as item_title
-    FROM borrow_requests r
-    LEFT JOIN items i ON r.item_id = i.id AND r.item_id > 0
-");
-if ($brw_res) {
-    while ($r = $brw_res->fetch_assoc()) {
-        $user_schedules[] = [
-            'date' => $r['borrow_date'],
-            'time' => $r['scheduled_time'] ?? '09:00 AM - 10:00 AM',
-            'type' => 'Borrow Start',
-            'badge' => 'bg-secondary',
-            'id' => $r['request_group_id'],
-            'requisitioner' => $r['requisitioner_name'] . ' (' . $r['department'] . ')',
-            'items' => 'Borrow: ' . ($r['item_title'] ?? 'Equipment') . ' (x' . $r['quantity'] . ')',
-            'status' => $r['status']
-        ];
-        $user_schedules[] = [
-            'date' => $r['expected_return_date'],
-            'time' => 'Before End of Day',
-            'type' => 'Borrow Return Deadline',
-            'badge' => 'bg-danger',
-            'id' => $r['request_group_id'],
-            'requisitioner' => $r['requisitioner_name'] . ' (' . $r['department'] . ')',
-            'items' => 'RETURN Item: ' . ($r['item_title'] ?? 'Equipment') . ' (x' . $r['quantity'] . ')',
-            'status' => $r['status']
-        ];
-    }
-}
 
 // Organize user personal schedules by day number for current month
 $user_month_schedules = [];

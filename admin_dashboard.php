@@ -803,17 +803,6 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                             <?php
                             $all_schedules = [];
 
-                            // Borrow return schedules
-                            foreach ($borrow_requests_list as $b) {
-                                $all_schedules[] = [
-                                    'date' => $b['expected_return_date'],
-                                    'time' => $b['scheduled_time'] ?? '09:00 AM - 10:00 AM',
-                                    'type' => 'Borrow Return Deadline',
-                                    'id' => $b['request_group_id'],
-                                    'req' => $b['requisitioner_name'] . ' (' . $b['department'] . ')',
-                                    'details' => 'Return item: ' . $b['item_name'] . ' (x' . $b['quantity'] . ') - Status: ' . $b['status']
-                                ];
-                            }
 
                             // Printing schedules
                             foreach ($print_requests_list as $p) {
