@@ -109,8 +109,8 @@ if ($cal_stmt) {
         $status = $row['status'] ?? 'Approved';
         $row_user_id = intval($row['user_id'] ?? 0);
 
-        // Show Approved schedules to everyone, or Pending/Rejected if owned by current user
-        if ($status === 'Approved' || ($row_user_id === $user_id)) {
+        // Show Approved schedules only on the whiteboard schedule board
+        if ($status === 'Approved') {
             $day_num = intval(date('j', strtotime($row['event_date'])));
             $admin_schedules[$day_num][] = $row;
         }
