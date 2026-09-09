@@ -17,6 +17,49 @@ $user_id = intval($_SESSION['user_id']);
 $month = isset($_GET['month']) ? intval($_GET['month']) : intval(date('m'));
 $year = isset($_GET['year']) ? intval($_GET['year']) : intval(date('Y'));
 
+// Handle user schedule request submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_request_schedule'])) {
+    $title = trim($_POST['title'] ?? '');
+    $department = trim($_POST['department'] ?? '');
+    $room = trim($_POST['room'] ?? '');
+    $equipment = trim($_POST['equipment'] ?? '');
+    $event_date = trim($_POST['event_date'] ?? '');
+    $scheduled_time = trim($_POST['scheduled_time'] ?? '');
+    $details = trim($_POST['details'] ?? '');
+
+    if (!empty($event_date)) {
+        $event_ts = strtotime($event_date);
+        if ($event_ts) {
+            $month = intval(date('m', $event_ts));
+            $year = intval(date('Y', $event_ts));
+        }
+    }
+
+    // Get user's fullname or username for created_by
+    $u_res = $conn->query("SELECT fullname FROM users WHERE id = {$user_id}");
+    $created_by = 'User Request';
+    if ($u_res && $u_row = $u_res->fetch_assoc()) {
+        $created_by = $u_row['fullname'];
+    }
+
+    if (!empty($title) && !empty($event_date)) {
+        $stmt_req = $conn->prepare("INSERT INTO calendar_schedules (user_id, title, department, room, equipment, event_date, scheduled_time, details, status, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Pending', ?)");
+        $stmt_req->bind_param("issssssss", $user_id, $title, $department, $room, $equipment, $event_date, $scheduled_time, $details, $created_by);
+        if ($stmt_req->execute()) {
+            $_SESSION['schedule_msg'] = "Matagumpay na naisumite ang iyong schedule request! Hinihintay ang pag-aprubah ng Admin.";
+            $_SESSION['schedule_msg_type'] = "success";
+        } else {
+            $_SESSION['schedule_msg'] = "Nabigong isumite ang schedule request.";
+            $_SESSION['schedule_msg_type'] = "danger";
+        }
+    } else {
+        $_SESSION['schedule_msg'] = "Paki-punan ang Pamagat (Title) at Petsa (Date).";
+        $_SESSION['schedule_msg_type'] = "warning";
+    }
+    header("Location: user_schedule.php?month={$month}&year={$year}");
+    exit;
+}
+
 if ($month < 1) { $month = 12; $year--; }
 if ($month > 12) { $month = 1; $year++; }
 
@@ -47,8 +90,14 @@ if ($cal_stmt) {
     $cal_stmt->execute();
     $res = $cal_stmt->get_result();
     while ($row = $res->fetch_assoc()) {
-        $day_num = intval(date('j', strtotime($row['event_date'])));
-        $admin_schedules[$day_num][] = $row;
+        $status = $row['status'] ?? 'Approved';
+        $row_user_id = intval($row['user_id'] ?? 0);
+
+        // Show Approved schedules to everyone, or Pending/Rejected if owned by current user
+        if ($status === 'Approved' || ($row_user_id === $user_id)) {
+            $day_num = intval(date('j', strtotime($row['event_date'])));
+            $admin_schedules[$day_num][] = $row;
+        }
     }
 }
 
@@ -94,15 +143,18 @@ for ($d = 1; $d <= $days_in_month; $d++) {
     if (isset($admin_schedules[$d])) {
         foreach ($admin_schedules[$d] as $as) {
             $dept_room_eq = trim(($as['department'] ? $as['department'] : '') . ($as['room'] ? ' (' . $as['room'] . ')' : '') . ($as['equipment'] ? ' [' . $as['equipment'] . ']' : ''));
+            $st = $as['status'] ?? 'Approved';
+            $category_title = ($st === 'Approved') ? 'Whiteboard Schedule' : "Schedule ($st)";
             $day_events_map[$d][] = [
-                'category' => 'Admin Posting',
+                'category' => $category_title,
                 'title' => ($dept_room_eq ? '[' . $dept_room_eq . '] ' : '') . $as['title'],
                 'time' => $as['scheduled_time'] ?? 'All Day',
                 'details' => $as['details'] ?? '',
-                'requisitioner' => $dept_room_eq ?: 'Admin Posting',
+                'requisitioner' => $dept_room_eq ?: 'Schedule',
                 'room' => $as['room'] ?? '',
                 'equipment' => $as['equipment'] ?? '',
-                'badge' => 'bg-danger text-white',
+                'status' => $st,
+                'badge' => ($st === 'Approved') ? 'bg-danger text-white' : (($st === 'Rejected') ? 'bg-secondary text-white' : 'bg-warning text-dark'),
                 'is_admin' => true
             ];
         }
@@ -330,6 +382,56 @@ usort($user_schedules, function($a, $b) {
 </nav>
 
 <div class="container py-4" style="max-width: 1100px;">
+    <?php if (isset($_SESSION['schedule_msg'])): ?>
+        <div class="alert alert-<?= $_SESSION['schedule_msg_type'] ?? 'info' ?> alert-dismissible fade show rounded-3 shadow-sm mb-4" role="alert">
+            <?= htmlspecialchars($_SESSION['schedule_msg']) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['schedule_msg'], $_SESSION['schedule_msg_type']); ?>
+    <?php endif; ?>
+
+    <!-- User Schedule Request Form Card -->
+    <div class="card p-4 border-0 shadow-sm rounded-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold text-dark mb-0"><i class="bi bi-calendar-plus-fill text-primary me-2"></i>Magdagdag ng Bagong Whiteboard Schedule (Request)</h5>
+            <span class="badge bg-light text-primary border rounded-pill px-3 py-2 fw-semibold"><i class="bi bi-info-circle me-1"></i>Para sa pag-apruba ng Admin</span>
+        </div>
+        <form method="POST" action="" class="bg-light p-3 rounded-3 border">
+            <input type="hidden" name="action_request_schedule" value="1">
+            <div class="row g-3">
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-secondary">Department / Subject Code</label>
+                    <input type="text" name="department" class="form-control form-control-sm" placeholder="e.g., CRIM, HM, CBA, SAD">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-secondary">Room / Venue</label>
+                    <input type="text" name="room" class="form-control form-control-sm" placeholder="e.g., Room 101, Lab A, Gym">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-secondary">Equipment / Gamit</label>
+                    <input type="text" name="equipment" class="form-control form-control-sm" placeholder="e.g., Projector, Mic, Extension">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-secondary">Title / Activity *</label>
+                    <input type="text" name="title" class="form-control form-control-sm" placeholder="e.g., Class Schedule" required>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-secondary">Event Date *</label>
+                    <input type="date" name="event_date" class="form-control form-control-sm" required value="<?= date('Y-m-d') ?>">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-secondary">Time Slot</label>
+                    <input type="text" name="scheduled_time" class="form-control form-control-sm" placeholder="e.g., 7:00 AM - 12:00 PM">
+                </div>
+                <div class="col-md-12 d-flex justify-content-end mt-2">
+                    <button type="submit" class="btn btn-sm btn-logo-primary rounded-pill px-4 fw-bold">
+                        <i class="bi bi-plus-circle me-1"></i> Add Schedule
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <!-- Navigation Header -->
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
         <div>

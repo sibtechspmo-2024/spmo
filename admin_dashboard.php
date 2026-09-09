@@ -190,6 +190,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_delete_schedul
     }
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_approve_schedule'])) {
+    $sched_id = intval($_POST['schedule_id'] ?? 0);
+    if ($sched_id > 0) {
+        $stmt_app = $conn->prepare("UPDATE calendar_schedules SET status = 'Approved' WHERE id = ?");
+        $stmt_app->bind_param("i", $sched_id);
+        if ($stmt_app->execute()) {
+            // Fetch schedule details for notification
+            $s_res = $conn->query("SELECT user_id, title, event_date FROM calendar_schedules WHERE id = {$sched_id}");
+            if ($s_res && $s_row = $s_res->fetch_assoc()) {
+                $target_user = intval($s_row['user_id'] ?? 0);
+                if ($target_user > 0) {
+                    $notif_msg = "Inaprubahan ng Admin ang iyong schedule request na '{$s_row['title']}' para sa {$s_row['event_date']}.";
+                    $stmt_notif = $conn->prepare("INSERT INTO notifications (user_id, message) VALUES (?, ?)");
+                    $stmt_notif->bind_param("is", $target_user, $notif_msg);
+                    $stmt_notif->execute();
+                }
+            }
+            sendResponse("Matagumpay na inaprubahan ang schedule request!", true);
+        } else {
+            sendResponse("Nabigong aprubahan ang schedule.", false);
+        }
+    } else {
+        sendResponse("Invalid schedule ID.", false);
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_reject_schedule'])) {
+    $sched_id = intval($_POST['schedule_id'] ?? 0);
+    if ($sched_id > 0) {
+        $stmt_rej = $conn->prepare("UPDATE calendar_schedules SET status = 'Rejected' WHERE id = ?");
+        $stmt_rej->bind_param("i", $sched_id);
+        if ($stmt_rej->execute()) {
+            // Fetch schedule details for notification
+            $s_res = $conn->query("SELECT user_id, title, event_date FROM calendar_schedules WHERE id = {$sched_id}");
+            if ($s_res && $s_row = $s_res->fetch_assoc()) {
+                $target_user = intval($s_row['user_id'] ?? 0);
+                if ($target_user > 0) {
+                    $notif_msg = "Tinanggihan ng Admin ang iyong schedule request na '{$s_row['title']}' para sa {$s_row['event_date']}.";
+                    $stmt_notif = $conn->prepare("INSERT INTO notifications (user_id, message) VALUES (?, ?)");
+                    $stmt_notif->bind_param("is", $target_user, $notif_msg);
+                    $stmt_notif->execute();
+                }
+            }
+            sendResponse("Tinanggihan ang schedule request.", true);
+        } else {
+            sendResponse("Nabigong baguhin ang status ng schedule.", false);
+        }
+    } else {
+        sendResponse("Invalid schedule ID.", false);
+    }
+}
+
 // ACTION HANDLER PARA SA DOCUMENT PRINTING REQUESTS
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_print_request'])) {
     $req_id = intval($_POST['request_id'] ?? 0);
@@ -752,6 +804,7 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                                 <th>Title / Activity</th>
                                 <th>Date</th>
                                 <th>Time Slot</th>
+                                <th>Status</th>
                                 <th>Posted By</th>
                                 <th class="text-end">Action</th>
                             </tr>
@@ -761,6 +814,8 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                             $posted_cal = $conn->query("SELECT * FROM calendar_schedules ORDER BY event_date DESC, id DESC");
                             if ($posted_cal && $posted_cal->num_rows > 0):
                                 while ($pcal = $posted_cal->fetch_assoc()):
+                                    $st = $pcal['status'] ?? 'Approved';
+                                    $stClass = ($st === 'Approved') ? 'bg-success' : (($st === 'Rejected') ? 'bg-danger' : 'bg-warning text-dark');
                             ?>
                                 <tr>
                                     <td class="fw-bold text-secondary">#<?= $pcal['id'] ?></td>
@@ -770,22 +825,40 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                                     <td class="fw-bold text-dark"><?= htmlspecialchars($pcal['title']) ?></td>
                                     <td class="fw-bold text-primary"><i class="fa-solid fa-calendar me-1"></i><?= htmlspecialchars($pcal['event_date']) ?></td>
                                     <td><span class="badge bg-light text-dark border"><?= htmlspecialchars($pcal['scheduled_time'] ?: 'N/A') ?></span></td>
+                                    <td><span class="badge <?= $stClass ?> px-3 py-2 fw-bold"><?= $st ?></span></td>
                                     <td class="small text-muted"><?= htmlspecialchars($pcal['created_by']) ?></td>
                                     <td class="text-end">
-                                        <form method="POST" action="" class="ajax-form d-inline">
-                                            <input type="hidden" name="action_delete_schedule" value="1">
-                                            <input type="hidden" name="schedule_id" value="<?= $pcal['id'] ?>">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold" onclick="return confirm('Sigurado ka bang burahin ang schedule na ito?');">
-                                                <i class="fa-solid fa-trash me-1"></i> Delete
-                                            </button>
-                                        </form>
+                                        <?php if ($st === 'Pending'): ?>
+                                            <form method="POST" action="" class="ajax-form d-inline me-1">
+                                                <input type="hidden" name="action_approve_schedule" value="1">
+                                                <input type="hidden" name="schedule_id" value="<?= $pcal['id'] ?>">
+                                                <button type="submit" class="btn btn-sm btn-success rounded-pill px-2 fw-bold" title="Approve Schedule">
+                                                    <i class="fa-solid fa-check"></i> Approve
+                                                </button>
+                                            </form>
+                                            <form method="POST" action="" class="ajax-form d-inline me-1">
+                                                <input type="hidden" name="action_reject_schedule" value="1">
+                                                <input type="hidden" name="schedule_id" value="<?= $pcal['id'] ?>">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2 fw-bold" title="Reject Schedule">
+                                                    <i class="fa-solid fa-xmark"></i> Reject
+                                                </button>
+                                            </form>
+                                        <?php else: ?>
+                                            <form method="POST" action="" class="ajax-form d-inline">
+                                                <input type="hidden" name="action_delete_schedule" value="1">
+                                                <input type="hidden" name="schedule_id" value="<?= $pcal['id'] ?>">
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary rounded-pill px-2 fw-bold" onclick="return confirm('Sigurado ka bang burahin ang schedule na ito?');">
+                                                    <i class="fa-solid fa-trash me-1"></i> Delete
+                                                </button>
+                                            </form>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php
                                 endwhile;
                             else:
                             ?>
-                                <tr><td colspan="9" class="text-center text-muted py-4">Walang nai-post na admin schedules.</td></tr>
+                                <tr><td colspan="10" class="text-center text-muted py-4">Walang nai-post na admin schedules.</td></tr>
                             <?php endif; ?>
                         </tbody>
                     </table>

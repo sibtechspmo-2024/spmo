@@ -312,6 +312,7 @@ if (!$conn->connect_error) {
     $conn->query("
         CREATE TABLE IF NOT EXISTS calendar_schedules (
             id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NULL,
             title TEXT NOT NULL,
             department TEXT NULL,
             room TEXT NULL,
@@ -319,6 +320,7 @@ if (!$conn->connect_error) {
             event_date DATE NOT NULL,
             scheduled_time TEXT NULL,
             details TEXT NULL,
+            status TEXT DEFAULT 'Approved',
             created_by TEXT DEFAULT 'Admin',
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
@@ -326,6 +328,8 @@ if (!$conn->connect_error) {
 
     @$conn->query("ALTER TABLE calendar_schedules ADD COLUMN room TEXT NULL");
     @$conn->query("ALTER TABLE calendar_schedules ADD COLUMN equipment TEXT NULL");
+    @$conn->query("ALTER TABLE calendar_schedules ADD COLUMN user_id INT NULL");
+    @$conn->query("ALTER TABLE calendar_schedules ADD COLUMN status TEXT DEFAULT 'Approved'");
 
     // Seed default admin and user if users table is empty
     $check_users = $conn->query("SELECT COUNT(*) as cnt FROM users");
