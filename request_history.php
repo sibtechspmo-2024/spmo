@@ -22,6 +22,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete') {
         $table = 'document_printing_requests';
     } else if ($type === 'maintenance') {
         $table = 'maintenance_requests';
+    } else if ($type === 'borrow') {
+        $table = 'borrow_requests';
     } else {
         $table = 'supply_requests';
     }
