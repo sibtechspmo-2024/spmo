@@ -314,6 +314,7 @@ if (!$conn->connect_error) {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title TEXT NOT NULL,
             department TEXT NULL,
+            room TEXT NULL,
             event_date DATE NOT NULL,
             scheduled_time TEXT NULL,
             details TEXT NULL,
@@ -321,6 +322,8 @@ if (!$conn->connect_error) {
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     ");
+
+    @$conn->query("ALTER TABLE calendar_schedules ADD COLUMN room TEXT NULL");
 
     // Seed default admin and user if users table is empty
     $check_users = $conn->query("SELECT COUNT(*) as cnt FROM users");

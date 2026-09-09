@@ -124,12 +124,14 @@ for ($d = 1; $d <= $days_in_month; $d++) {
     $day_events_map[$d] = [];
     if (isset($admin_schedules[$d])) {
         foreach ($admin_schedules[$d] as $as) {
+            $dept_room = trim(($as['department'] ? $as['department'] : '') . ($as['room'] ? ' (' . $as['room'] . ')' : ''));
             $day_events_map[$d][] = [
                 'category' => 'Admin Posting',
-                'title' => ($as['department'] ? $as['department'] . ' ' : '') . $as['title'],
+                'title' => ($dept_room ? '[' . $dept_room . '] ' : '') . $as['title'],
                 'time' => $as['scheduled_time'] ?? 'All Day',
                 'details' => $as['details'] ?? '',
-                'requisitioner' => $as['department'] ?? 'Admin Posting',
+                'requisitioner' => $dept_room ?: 'Admin Posting',
+                'room' => $as['room'] ?? '',
                 'badge' => 'bg-danger text-white',
                 'is_admin' => true
             ];
@@ -547,17 +549,21 @@ function openDayBreakdown(dateStr, events) {
         events.forEach(function(ev) {
             var iconClass = ev.is_admin ? 'bi-pin-angle-fill text-danger' : 'bi-clock-history text-primary';
             var bgBadge = ev.is_admin ? 'bg-danger' : 'bg-primary';
+            var roomInfo = ev.room ? `<span class="badge bg-info text-white ms-2"><i class="bi bi-door-open-fill me-1"></i>${ev.room}</span>` : '';
 
             html += `
                 <div class="list-group-item p-3 mb-2 rounded-3 border bg-light shadow-sm">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="badge ${bgBadge} rounded-pill px-3 py-1 fw-bold">
-                            <i class="bi ${iconClass} text-white me-1"></i>${ev.category}
-                        </span>
+                        <div>
+                            <span class="badge ${bgBadge} rounded-pill px-3 py-1 fw-bold">
+                                <i class="bi ${iconClass} text-white me-1"></i>${ev.category}
+                            </span>
+                            ${roomInfo}
+                        </div>
                         <span class="badge bg-white text-dark border px-3 py-1 fw-bold"><i class="bi bi-clock me-1 text-primary"></i>${ev.time}</span>
                     </div>
                     <h6 class="fw-bold text-dark mb-1">${ev.title}</h6>
-                    <p class="small text-secondary mb-1"><strong>Requisitioner / Dept:</strong> ${ev.requisitioner}</p>
+                    <p class="small text-secondary mb-1"><strong>Requisitioner / Dept / Room:</strong> ${ev.requisitioner}</p>
                     ${ev.details ? `<p class="small text-muted mb-0"><strong>Details:</strong> ${ev.details}</p>` : ''}
                 </div>
             `;
