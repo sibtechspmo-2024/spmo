@@ -17,6 +17,8 @@ $user_id = intval($_SESSION['user_id']);
 $month = isset($_GET['month']) ? intval($_GET['month']) : intval(date('m'));
 $year = isset($_GET['year']) ? intval($_GET['year']) : intval(date('Y'));
 
+$is_ajax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+
 // Handle user schedule request submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_request_schedule'])) {
     $title = trim($_POST['title'] ?? '');
@@ -42,22 +44,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_request_schedu
         $created_by = $u_row['fullname'];
     }
 
+    $msg = '';
+    $success = false;
+
     if (!empty($title) && !empty($event_date)) {
         $stmt_req = $conn->prepare("INSERT INTO calendar_schedules (user_id, title, department, room, equipment, event_date, scheduled_time, details, status, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Pending', ?)");
         $stmt_req->bind_param("issssssss", $user_id, $title, $department, $room, $equipment, $event_date, $scheduled_time, $details, $created_by);
         if ($stmt_req->execute()) {
-            $_SESSION['schedule_msg'] = "Matagumpay na naisumite ang iyong schedule request! Hinihintay ang pag-aprubah ng Admin.";
+            $msg = "Matagumpay na naisumite ang iyong schedule request! Hinihintay ang pag-aprubah ng Admin.";
+            $success = true;
+            $_SESSION['schedule_msg'] = $msg;
             $_SESSION['schedule_msg_type'] = "success";
         } else {
-            $_SESSION['schedule_msg'] = "Nabigong isumite ang schedule request.";
+            $msg = "Nabigong isumite ang schedule request.";
+            $_SESSION['schedule_msg'] = $msg;
             $_SESSION['schedule_msg_type'] = "danger";
         }
     } else {
-        $_SESSION['schedule_msg'] = "Paki-punan ang Pamagat (Title) at Petsa (Date).";
+        $msg = "Paki-punan ang Pamagat (Title) at Petsa (Date).";
+        $_SESSION['schedule_msg'] = $msg;
         $_SESSION['schedule_msg_type'] = "warning";
     }
-    header("Location: user_schedule.php?month={$month}&year={$year}");
-    exit;
+
+    if ($is_ajax) {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => $success, 'message' => $msg, 'month' => $month, 'year' => $year]);
+        exit;
+    } else {
+        header("Location: user_schedule.php?month={$month}&year={$year}");
+        exit;
+    }
 }
 
 if ($month < 1) { $month = 12; $year--; }
@@ -178,6 +194,41 @@ for ($d = 1; $d <= $days_in_month; $d++) {
 usort($user_schedules, function($a, $b) {
     return strtotime($a['date']) - strtotime($b['date']);
 });
+
+// Live JSON endpoint for background polling
+if (isset($_GET['fetch_live_data']) && $_GET['fetch_live_data'] == '1') {
+    header('Content-Type: application/json');
+
+    $html_schedules_table = '';
+    if (!empty($user_schedules)) {
+        foreach ($user_schedules as $sched) {
+            $st = $sched['status'];
+            $stClass = ($st == 'Approved' || $st == 'Returned' || $st == 'Completed') ? 'bg-success text-white' : (($st == 'Rejected') ? 'bg-danger text-white' : 'bg-warning text-dark');
+            $html_schedules_table .= '<tr>';
+            $html_schedules_table .= '<td class="fw-bold text-primary text-nowrap"><i class="bi bi-calendar-check me-1"></i>' . htmlspecialchars($sched['date']) . '</td>';
+            $html_schedules_table .= '<td><span class="badge bg-light text-dark border">' . htmlspecialchars($sched['time']) . '</span></td>';
+            $html_schedules_table .= '<td><span class="badge ' . $sched['badge'] . ' fw-bold">' . htmlspecialchars($sched['type']) . '</span></td>';
+            $html_schedules_table .= '<td class="fw-bold text-logo-blue">#' . htmlspecialchars($sched['id']) . '</td>';
+            $html_schedules_table .= '<td><span class="badge bg-light text-dark border fw-semibold">' . htmlspecialchars($sched['requisitioner'] ?? 'N/A') . '</span></td>';
+            $html_schedules_table .= '<td class="small text-dark fw-semibold">' . htmlspecialchars($sched['items']) . '</td>';
+            $html_schedules_table .= '<td><span class="badge rounded-pill px-3 py-1 ' . $stClass . '">' . $st . '</span></td>';
+            $html_schedules_table .= '</tr>';
+        }
+    } else {
+        $html_schedules_table = '<tr><td colspan="7" class="text-center text-muted py-4"><i class="bi bi-calendar-x fs-2 d-block mb-1 text-secondary"></i>Walang nakaiskedyul na mga gawain sa kasalukuyan.</td></tr>';
+    }
+
+    echo json_encode([
+        'month' => $month,
+        'year' => $year,
+        'first_day_of_week' => $first_day_of_week,
+        'days_in_month' => $days_in_month,
+        'day_events_map' => $day_events_map,
+        'table_html' => $html_schedules_table,
+        'total_schedules' => count($user_schedules)
+    ]);
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -396,7 +447,7 @@ usort($user_schedules, function($a, $b) {
             <h5 class="fw-bold text-dark mb-0"><i class="bi bi-calendar-plus-fill text-primary me-2"></i>Magdagdag ng Bagong Whiteboard Schedule (Request)</h5>
             <span class="badge bg-light text-primary border rounded-pill px-3 py-2 fw-semibold"><i class="bi bi-info-circle me-1"></i>Para sa pag-apruba ng Admin</span>
         </div>
-        <form method="POST" action="" class="bg-light p-3 rounded-3 border">
+        <form method="POST" action="" class="ajax-schedule-form bg-light p-3 rounded-3 border">
             <input type="hidden" name="action_request_schedule" value="1">
             <div class="row g-3">
                 <div class="col-md-2">
@@ -535,7 +586,7 @@ usort($user_schedules, function($a, $b) {
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
         <div class="card-header bg-light p-3 border-bottom d-flex justify-content-between align-items-center">
             <h6 class="fw-bold mb-0 text-dark d-flex align-items-center"><i class="bi bi-clock-history me-2 text-primary"></i>Buong Listahan ng Lahat ng Nakaiskedyul na Pickup, Event & Deadlines</h6>
-            <span class="badge bg-secondary"><?= count($user_schedules) ?> Total Items</span>
+            <span class="badge bg-secondary" id="total-schedules-badge"><?= count($user_schedules) ?> Total Items</span>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -551,7 +602,7 @@ usort($user_schedules, function($a, $b) {
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="user-schedules-tbody">
                         <?php if (!empty($user_schedules)): ?>
                             <?php foreach ($user_schedules as $sched): ?>
                                 <tr>
@@ -603,8 +654,131 @@ usort($user_schedules, function($a, $b) {
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+let currentMonth = <?= $month ?>;
+let currentYear = <?= $year ?>;
+let firstDayOfWeek = <?= $first_day_of_week ?>;
+let daysInMonth = <?= $days_in_month ?>;
+let dayEventsMap = <?= json_encode($day_events_map) ?>;
+
+function renderWhiteboardGrid(map, fdow, dim, month, year) {
+    let grid = $('.whiteboard-grid');
+    grid.find('.whiteboard-cell').remove();
+
+    // Empty cells before first day of month
+    for (let i = 1; i < fdow; i++) {
+        grid.append('<div class="whiteboard-cell empty"></div>');
+    }
+
+    for (let day = 1; day <= dim; day++) {
+        let events = map[day] || [];
+        let totalEvents = events.length;
+        let dateFormatted = year + '-' + String(month).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+
+        let cell = $('<div class="whiteboard-cell"></div>');
+        cell.attr('onclick', `openDayBreakdown('${dateFormatted}', ${JSON.stringify(events).replace(/"/g, '&quot;')})`);
+
+        cell.append(`<div class="whiteboard-date-num">${day}</div>`);
+
+        let displayLimit = 2;
+        let count = 0;
+        events.forEach(function(ev) {
+            if (count >= displayLimit) return;
+            if (ev.is_admin) {
+                let badge = $('<div class="marker-badge-red"></div>')
+                    .attr('title', ev.title)
+                    .html(`<i class="bi bi-pin-fill me-1"></i>${escapeHtml(ev.title)}`);
+                cell.append(badge);
+            } else {
+                let badge = $('<div class="marker-badge-blue"></div>')
+                    .attr('title', ev.title)
+                    .html(`<i class="bi bi-clock me-1"></i>${escapeHtml(ev.category)}: ${escapeHtml(ev.time)}`);
+                cell.append(badge);
+            }
+            count++;
+        });
+
+        if (totalEvents > displayLimit) {
+            let moreCount = totalEvents - displayLimit;
+            cell.append(`<span class="more-schedules-badge">+ ${moreCount} higit pa</span>`);
+        }
+
+        let currentCol = (fdow + day - 2) % 7 + 1;
+        if (totalEvents == 0 && currentCol == 7) {
+            cell.append('<div class="slash-mark">///</div>');
+        }
+
+        grid.append(cell);
+    }
+
+    let totalCells = (fdow - 1) + dim;
+    let remainingCells = (7 - (totalCells % 7)) % 7;
+    for (let i = 0; i < remainingCells; i++) {
+        grid.append('<div class="whiteboard-cell empty"></div>');
+    }
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+function pollUserSchedule() {
+    $.ajax({
+        url: window.location.pathname + `?fetch_live_data=1&month=${currentMonth}&year=${currentYear}`,
+        type: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        success: function(data) {
+            if (data && data.day_events_map) {
+                dayEventsMap = data.day_events_map;
+                renderWhiteboardGrid(data.day_events_map, data.first_day_of_week, data.days_in_month, data.month, data.year);
+                if (data.table_html) {
+                    $('#user-schedules-tbody').html(data.table_html);
+                }
+                if (typeof data.total_schedules !== 'undefined') {
+                    $('#total-schedules-badge').text(data.total_schedules + ' Total Items');
+                }
+            }
+        }
+    });
+}
+
+$(document).on('submit', '.ajax-schedule-form', function(e) {
+    e.preventDefault();
+    var form = this;
+    var formData = new FormData(form);
+
+    $.ajax({
+        url: window.location.pathname,
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        success: function(response) {
+            if (response && response.success) {
+                form.reset();
+                if (response.month && response.year) {
+                    currentMonth = response.month;
+                    currentYear = response.year;
+                }
+                alert(response.message || 'Schedule request submitted successfully!');
+                pollUserSchedule();
+            } else {
+                alert(response.message || 'Failed to submit schedule request.');
+            }
+        },
+        error: function() {
+            alert('An error occurred while submitting schedule request.');
+        }
+    });
+});
+
+setInterval(pollUserSchedule, 3000);
+
 function openDayBreakdown(dateStr, events) {
     document.getElementById('modalDateTitle').innerHTML = '<i class="bi bi-calendar-event me-2"></i>Schedule Breakdown para sa ' + dateStr;
     var container = document.getElementById('modalEventsContent');
