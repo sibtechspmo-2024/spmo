@@ -657,7 +657,7 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                                         <td class="text-end">
                                             <div class="btn-group">
                                                 <?php if ($b['status'] === 'Approved' || $b['status'] === 'Returned'): ?>
-                                                    <a href="print_borrow_request.php?group_id=<?= $b['request_group_id'] ?>" target="_blank" class="btn btn-sm btn-outline-dark rounded-pill px-2 me-1" title="Print Borrower Form"><i class="fa-solid fa-print"></i> Print</a>
+                                                    <a href="print_borrow_request.php?group_id=<?= $b['request_group_id'] ?>" class="btn btn-sm btn-outline-dark rounded-pill px-2 me-1" title="Print Borrower Form"><i class="fa-solid fa-print"></i> Print</a>
                                                 <?php endif; ?>
                                                 <form method="POST" action="" class="ajax-form d-inline">
                                                     <input type="hidden" name="action_borrow_request" value="1">
@@ -697,7 +697,7 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
             <div class="card p-4 border-0 shadow-sm rounded-4 mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-calendar-plus text-logo-blue me-2"></i>Magdagdag ng Bagong Whiteboard Schedule (Admin Posting)</h5>
-                    <a href="user_schedule.php" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">
+                    <a href="user_schedule.php" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">
                         <i class="fa-solid fa-eye me-1"></i> View Whiteboard Schedule
                     </a>
                 </div>
@@ -876,7 +876,7 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                                         </td>
                                         <td>
                                             <?php if (!empty($p['document_file'])): ?>
-                                                <a href="uploads/<?= htmlspecialchars($p['document_file']) ?>" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold">
+                                                <a href="uploads/<?= htmlspecialchars($p['document_file']) ?>" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold">
                                                     <i class="fa-solid fa-file-pdf me-1"></i> View Document
                                                 </a>
                                             <?php else: ?>
@@ -1050,7 +1050,7 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                                         <td class="small text-secondary"><?= date('M d, Y h:i A', strtotime($req['created_at'])) ?></td>
                                         <td class="text-end">
                                             <?php if ($st === 'Approved'): ?>
-                                                <a href="<?= $print_link ?>" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-bold">
+                                                <a href="<?= $print_link ?>" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-bold">
                                                     <i class="fa-solid fa-print me-1"></i> Print Voucher
                                                 </a>
                                             <?php elseif ($st === 'Pending'): ?>
