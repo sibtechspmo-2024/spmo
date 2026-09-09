@@ -22,6 +22,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete') {
         $table = 'document_printing_requests';
     } else if ($type === 'maintenance') {
         $table = 'maintenance_requests';
+    } else if ($type === 'borrow') {
+        $table = 'borrow_requests';
     } else {
         $table = 'supply_requests';
     }
@@ -322,7 +324,7 @@ $maint_requests = $conn->query("
                                         <td class="fw-bold text-nowrap text-logo-blue">#<?= htmlspecialchars($req['request_group_id']) ?></td>
                                         <td>
                                             <?php if (!empty($req['document_file'])): ?>
-                                                <a href="uploads/<?= htmlspecialchars($req['document_file']) ?>" target="_blank" class="btn btn-sm btn-light border text-primary fw-semibold"><i class="bi bi-file-earmark-text me-1"></i>View File</a>
+                                                <a href="uploads/<?= htmlspecialchars($req['document_file']) ?>" class="btn btn-sm btn-light border text-primary fw-semibold"><i class="bi bi-file-earmark-text me-1"></i>View File</a>
                                             <?php else: ?>
                                                 <span class="text-muted small">No File</span>
                                             <?php endif; ?>
@@ -502,7 +504,7 @@ function renderPrintTable(tbodyId, items) {
             actionBtn = `<button class="btn btn-sm btn-outline-secondary rounded-pill px-3" disabled><i class="bi bi-clock me-1"></i>${req.status}</button>`;
         }
 
-        let fileBtn = req.document_file ? `<a href="uploads/${req.document_file}" target="_blank" class="btn btn-sm btn-light border text-primary fw-semibold"><i class="bi bi-file-earmark-text me-1"></i>View File</a>` : `<span class="text-muted small">No File</span>`;
+        let fileBtn = req.document_file ? `<a href="uploads/${req.document_file}" class="btn btn-sm btn-light border text-primary fw-semibold"><i class="bi bi-file-earmark-text me-1"></i>View File</a>` : `<span class="text-muted small">No File</span>`;
 
         html += `<tr id="row-${req.request_group_id}">
             <td class="fw-bold text-nowrap text-logo-blue">#${req.request_group_id}</td>

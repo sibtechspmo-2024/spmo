@@ -11,6 +11,131 @@ if (!isset($_SESSION['user_id']) || strtolower($_SESSION['role'] ?? '') !== 'adm
 // 1. AJAX Endpoint para sa Live Table Refresh
 if (isset($_GET['fetch_requests']) && $_GET['fetch_requests'] == '1') {
     $type = $_GET['type'] ?? 'office';
+
+    if ($type === 'schedules') {
+        $posted_cal = $conn->query("SELECT * FROM calendar_schedules ORDER BY event_date DESC, id DESC");
+        if ($posted_cal && $posted_cal->num_rows > 0) {
+            while ($pcal = $posted_cal->fetch_assoc()) {
+                $st = $pcal['status'] ?? 'Approved';
+                $stClass = ($st === 'Approved') ? 'bg-success' : (($st === 'Rejected') ? 'bg-danger' : 'bg-warning text-dark');
+                echo '<tr>';
+                echo '<td class="fw-bold text-secondary">#' . $pcal['id'] . '</td>';
+                echo '<td><span class="badge bg-danger text-white fw-bold">' . htmlspecialchars($pcal['department'] ?: 'GENERAL') . '</span></td>';
+                echo '<td><span class="badge bg-info text-white fw-bold">' . htmlspecialchars($pcal['room'] ?: 'N/A') . '</span></td>';
+                echo '<td><span class="badge bg-warning text-dark fw-bold">' . htmlspecialchars($pcal['equipment'] ?: 'N/A') . '</span></td>';
+                echo '<td class="fw-bold text-dark">' . htmlspecialchars($pcal['title']) . '</td>';
+                echo '<td class="fw-bold text-primary"><i class="fa-solid fa-calendar me-1"></i>' . htmlspecialchars($pcal['event_date']) . '</td>';
+                echo '<td><span class="badge bg-light text-dark border">' . htmlspecialchars($pcal['scheduled_time'] ?: 'N/A') . '</span></td>';
+                echo '<td><span class="badge ' . $stClass . ' px-3 py-2 fw-bold">' . $st . '</span></td>';
+                echo '<td class="small text-muted">' . htmlspecialchars($pcal['created_by']) . '</td>';
+                echo '<td class="text-end">';
+                if ($st === 'Pending') {
+                    echo '<form method="POST" action="" class="ajax-form d-inline me-1">';
+                    echo '<input type="hidden" name="action_approve_schedule" value="1">';
+                    echo '<input type="hidden" name="schedule_id" value="' . $pcal['id'] . '">';
+                    echo '<button type="submit" class="btn btn-sm btn-success rounded-pill px-2 fw-bold" title="Approve Schedule"><i class="fa-solid fa-check"></i> Approve</button>';
+                    echo '</form>';
+                    echo '<form method="POST" action="" class="ajax-form d-inline me-1">';
+                    echo '<input type="hidden" name="action_reject_schedule" value="1">';
+                    echo '<input type="hidden" name="schedule_id" value="' . $pcal['id'] . '">';
+                    echo '<button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2 fw-bold" title="Reject Schedule"><i class="fa-solid fa-xmark"></i> Reject</button>';
+                    echo '</form>';
+                } else {
+                    echo '<form method="POST" action="" class="ajax-form d-inline">';
+                    echo '<input type="hidden" name="action_delete_schedule" value="1">';
+                    echo '<input type="hidden" name="schedule_id" value="' . $pcal['id'] . '">';
+                    echo '<button type="submit" class="btn btn-sm btn-outline-secondary rounded-pill px-2 fw-bold" onclick="return confirm(\'Sigurado ka bang burahin ang schedule na ito?\');"><i class="fa-solid fa-trash me-1"></i> Delete</button>';
+                    echo '</form>';
+                }
+                echo '</td>';
+                echo '</tr>';
+            }
+        } else {
+            echo '<tr><td colspan="10" class="text-center text-muted py-4">Walang nai-post na admin schedules.</td></tr>';
+        }
+        exit;
+    }
+
+    if ($type === 'borrow') {
+        $borrow_requests_res = $conn->query("
+            SELECT r.id, r.request_group_id, r.requisitioner_name, r.department, r.quantity, r.borrow_date, r.expected_return_date, r.scheduled_time, r.purpose, r.status, r.created_at,
+                   IFNULL(i.item_name, r.item_name) as item_name
+            FROM borrow_requests r
+            LEFT JOIN items i ON r.item_id = i.id AND r.item_id > 0
+            ORDER BY r.id DESC
+        ");
+        if ($borrow_requests_res && $borrow_requests_res->num_rows > 0) {
+            while ($b = $borrow_requests_res->fetch_assoc()) {
+                echo '<tr>';
+                echo '<td class="fw-bold text-logo-blue">#' . htmlspecialchars($b['request_group_id']) . '</td>';
+                echo '<td><strong class="text-dark">' . htmlspecialchars($b['requisitioner_name']) . '</strong><br><span class="badge bg-light text-dark border">' . htmlspecialchars($b['department']) . '</span></td>';
+                echo '<td class="fw-semibold text-dark">' . htmlspecialchars($b['item_name']) . '</td>';
+                echo '<td><span class="badge bg-secondary rounded-pill">' . $b['quantity'] . '</span></td>';
+                echo '<td class="small"><strong class="text-primary"><i class="fa-solid fa-calendar-day me-1"></i>Start:</strong> ' . htmlspecialchars($b['borrow_date']) . '<br><strong class="text-danger"><i class="fa-solid fa-calendar-check me-1"></i>Return:</strong> ' . htmlspecialchars($b['expected_return_date']) . '<br><span class="text-muted"><i class="fa-solid fa-clock me-1"></i>' . htmlspecialchars($b['scheduled_time'] ?? '') . '</span></td>';
+                echo '<td>';
+                $bst = $b['status'];
+                if ($bst === 'Approved') echo '<span class="badge bg-success-subtle text-success border border-success-subtle fw-bold"><i class="fa-solid fa-circle-check me-1"></i>Approved</span>';
+                elseif ($bst === 'Returned') echo '<span class="badge bg-primary-subtle text-primary border border-primary-subtle fw-bold"><i class="fa-solid fa-rotate-left me-1"></i>Returned</span>';
+                elseif ($bst === 'Rejected') echo '<span class="badge bg-danger-subtle text-danger border border-danger-subtle fw-bold"><i class="fa-solid fa-circle-xmark me-1"></i>Rejected</span>';
+                else echo '<span class="badge bg-warning-subtle text-warning border border-warning-subtle fw-bold text-dark"><i class="fa-solid fa-clock me-1"></i>Pending</span>';
+                echo '</td>';
+                echo '<td class="text-end"><div class="btn-group">';
+                if ($b['status'] === 'Approved' || $b['status'] === 'Returned') {
+                    echo '<a href="print_borrow_request.php?group_id=' . $b['request_group_id'] . '" class="btn btn-sm btn-outline-dark rounded-pill px-2 me-1" title="Print Borrower Form"><i class="fa-solid fa-print"></i> Print</a>';
+                }
+                echo '<form method="POST" action="" class="ajax-form d-inline"><input type="hidden" name="action_borrow_request" value="1"><input type="hidden" name="request_id" value="' . $b['id'] . '"><input type="hidden" name="action" value="Approved"><button type="submit" class="btn btn-sm btn-success rounded-pill px-2 me-1" title="Approve Borrow" onclick="return confirm(\'I-approve ang hiram na ito?\');"><i class="fa-solid fa-check"></i> Approve</button></form>';
+                echo '<form method="POST" action="" class="ajax-form d-inline"><input type="hidden" name="action_borrow_request" value="1"><input type="hidden" name="request_id" value="' . $b['id'] . '"><input type="hidden" name="action" value="Returned"><button type="submit" class="btn btn-sm btn-primary rounded-pill px-2 me-1" title="Mark Returned" onclick="return confirm(\'Mark as returned to inventory?\');"><i class="fa-solid fa-rotate-left"></i> Returned</button></form>';
+                echo '<form method="POST" action="" class="ajax-form d-inline"><input type="hidden" name="action_borrow_request" value="1"><input type="hidden" name="request_id" value="' . $b['id'] . '"><input type="hidden" name="action" value="Rejected"><button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2" title="Reject" onclick="return confirm(\'I-reject ang hiram na ito?\');"><i class="fa-solid fa-xmark"></i> Reject</button></form>';
+                echo '</div></td>';
+                echo '</tr>';
+            }
+        } else {
+            echo '<tr><td colspan="7" class="text-center text-muted py-4">Walang borrow requests.</td></tr>';
+        }
+        exit;
+    }
+
+    if ($type === 'print') {
+        $print_requests_res = $conn->query("
+            SELECT id, user_id, request_group_id, requisitioner_name, department, document_file, paper_size, print_color, print_sides, binding_option, page_count, copies, total_price, purpose, date_needed, scheduled_time, status, created_at
+            FROM document_printing_requests
+            ORDER BY id DESC
+        ");
+        if ($print_requests_res && $print_requests_res->num_rows > 0) {
+            while ($p = $print_requests_res->fetch_assoc()) {
+                echo '<tr>';
+                echo '<td class="fw-bold text-logo-blue">#' . htmlspecialchars($p['request_group_id']) . '</td>';
+                echo '<td><strong class="text-dark">' . htmlspecialchars($p['requisitioner_name']) . '</strong><br><span class="badge bg-light text-dark border">' . htmlspecialchars($p['department']) . '</span></td>';
+                echo '<td>';
+                if (!empty($p['document_file'])) {
+                    echo '<a href="uploads/' . htmlspecialchars($p['document_file']) . '" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold"><i class="fa-solid fa-file-pdf me-1"></i> View Document</a>';
+                } else {
+                    echo '<span class="text-muted small">No File</span>';
+                }
+                echo '</td>';
+                echo '<td class="small"><strong>Size:</strong> ' . htmlspecialchars($p['paper_size']) . '<br><strong>Color:</strong> ' . htmlspecialchars($p['print_color']) . ' | <strong>Sides:</strong> ' . htmlspecialchars($p['print_sides']) . '<br><strong>Binding:</strong> ' . htmlspecialchars($p['binding_option']) . '<br><strong>Copies:</strong> ' . $p['page_count'] . ' pgs x ' . $p['copies'] . ' copies</td>';
+                echo '<td class="small text-nowrap"><strong class="text-primary"><i class="fa-solid fa-calendar me-1"></i>' . ($p['date_needed'] ? date('Y-m-d', strtotime($p['date_needed'])) : '-') . '</strong><br><span class="text-muted"><i class="fa-solid fa-clock me-1"></i>' . htmlspecialchars($p['scheduled_time'] ?? '09:00 AM - 10:00 AM') . '</span></td>';
+                echo '<td class="fw-bold text-success">₱' . number_format($p['total_price'], 2) . '</td>';
+                echo '<td>';
+                $pst = $p['status'];
+                if ($pst === 'Approved') echo '<span class="badge bg-success-subtle text-success border border-success-subtle fw-bold"><i class="fa-solid fa-circle-check me-1"></i>Approved</span>';
+                elseif ($pst === 'Completed') echo '<span class="badge bg-primary-subtle text-primary border border-primary-subtle fw-bold"><i class="fa-solid fa-check-double me-1"></i>Completed</span>';
+                elseif ($pst === 'Rejected') echo '<span class="badge bg-danger-subtle text-danger border border-danger-subtle fw-bold"><i class="fa-solid fa-circle-xmark me-1"></i>Rejected</span>';
+                else echo '<span class="badge bg-warning-subtle text-warning border border-warning-subtle fw-bold text-dark"><i class="fa-solid fa-clock me-1"></i>Pending</span>';
+                echo '</td>';
+                echo '<td class="text-end"><div class="btn-group">';
+                echo '<form method="POST" action="" class="ajax-form d-inline"><input type="hidden" name="action_print_request" value="1"><input type="hidden" name="request_id" value="' . $p['id'] . '"><input type="hidden" name="action" value="Approved"><button type="submit" class="btn btn-sm btn-success rounded-pill px-2 me-1" title="Approve" onclick="return confirm(\'I-approve ang printing request na ito?\');"><i class="fa-solid fa-check"></i> Approve</button></form>';
+                echo '<form method="POST" action="" class="ajax-form d-inline"><input type="hidden" name="action_print_request" value="1"><input type="hidden" name="request_id" value="' . $p['id'] . '"><input type="hidden" name="action" value="Completed"><button type="submit" class="btn btn-sm btn-primary rounded-pill px-2 me-1" title="Complete" onclick="return confirm(\'Mark as completed?\');"><i class="fa-solid fa-check-double"></i> Complete</button></form>';
+                echo '<form method="POST" action="" class="ajax-form d-inline"><input type="hidden" name="action_print_request" value="1"><input type="hidden" name="request_id" value="' . $p['id'] . '"><input type="hidden" name="action" value="Rejected"><button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2" title="Reject" onclick="return confirm(\'I-reject ang printing request na ito?\');"><i class="fa-solid fa-xmark"></i> Reject</button></form>';
+                echo '</div></td>';
+                echo '</tr>';
+            }
+        } else {
+            echo '<tr><td colspan="8" class="text-center text-muted py-4">Walang document printing requests.</td></tr>';
+        }
+        exit;
+    }
+
     $req_table = ($type === 'maintenance') ? 'maintenance_requests' : 'supply_requests';
 
     $requests = $conn->query("
@@ -156,13 +281,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_borrow_request
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_add_schedule'])) {
     $title = trim($_POST['title'] ?? '');
     $department = trim($_POST['department'] ?? '');
+    $room = trim($_POST['room'] ?? '');
+    $equipment = trim($_POST['equipment'] ?? '');
     $event_date = trim($_POST['event_date'] ?? '');
     $scheduled_time = trim($_POST['scheduled_time'] ?? '');
     $details = trim($_POST['details'] ?? '');
 
     if (!empty($title) && !empty($event_date)) {
-        $stmt_cal = $conn->prepare("INSERT INTO calendar_schedules (title, department, event_date, scheduled_time, details, created_by) VALUES (?, ?, ?, ?, ?, 'Admin')");
-        $stmt_cal->bind_param("sssss", $title, $department, $event_date, $scheduled_time, $details);
+        $stmt_cal = $conn->prepare("INSERT INTO calendar_schedules (title, department, room, equipment, event_date, scheduled_time, details, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, 'Admin')");
+        $stmt_cal->bind_param("sssssss", $title, $department, $room, $equipment, $event_date, $scheduled_time, $details);
         if ($stmt_cal->execute()) {
             sendResponse("Matagumpay na naidagdag ang bagong schedule sa kalendaryo!", true);
         } else {
@@ -182,6 +309,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_delete_schedul
             sendResponse("Matagumpay na nabura ang schedule!", true);
         } else {
             sendResponse("Nabigong burahin ang schedule.", false);
+        }
+    } else {
+        sendResponse("Invalid schedule ID.", false);
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_approve_schedule'])) {
+    $sched_id = intval($_POST['schedule_id'] ?? 0);
+    if ($sched_id > 0) {
+        $stmt_app = $conn->prepare("UPDATE calendar_schedules SET status = 'Approved' WHERE id = ?");
+        $stmt_app->bind_param("i", $sched_id);
+        if ($stmt_app->execute()) {
+            // Fetch schedule details for notification
+            $s_res = $conn->query("SELECT user_id, title, event_date FROM calendar_schedules WHERE id = {$sched_id}");
+            if ($s_res && $s_row = $s_res->fetch_assoc()) {
+                $target_user = intval($s_row['user_id'] ?? 0);
+                if ($target_user > 0) {
+                    $notif_msg = "Inaprubahan ng Admin ang iyong schedule request na '{$s_row['title']}' para sa {$s_row['event_date']}.";
+                    $stmt_notif = $conn->prepare("INSERT INTO notifications (user_id, message) VALUES (?, ?)");
+                    $stmt_notif->bind_param("is", $target_user, $notif_msg);
+                    $stmt_notif->execute();
+                }
+            }
+            sendResponse("Matagumpay na inaprubahan ang schedule request!", true);
+        } else {
+            sendResponse("Nabigong aprubahan ang schedule.", false);
+        }
+    } else {
+        sendResponse("Invalid schedule ID.", false);
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_reject_schedule'])) {
+    $sched_id = intval($_POST['schedule_id'] ?? 0);
+    if ($sched_id > 0) {
+        $stmt_rej = $conn->prepare("UPDATE calendar_schedules SET status = 'Rejected' WHERE id = ?");
+        $stmt_rej->bind_param("i", $sched_id);
+        if ($stmt_rej->execute()) {
+            // Fetch schedule details for notification
+            $s_res = $conn->query("SELECT user_id, title, event_date FROM calendar_schedules WHERE id = {$sched_id}");
+            if ($s_res && $s_row = $s_res->fetch_assoc()) {
+                $target_user = intval($s_row['user_id'] ?? 0);
+                if ($target_user > 0) {
+                    $notif_msg = "Tinanggihan ng Admin ang iyong schedule request na '{$s_row['title']}' para sa {$s_row['event_date']}.";
+                    $stmt_notif = $conn->prepare("INSERT INTO notifications (user_id, message) VALUES (?, ?)");
+                    $stmt_notif->bind_param("is", $target_user, $notif_msg);
+                    $stmt_notif->execute();
+                }
+            }
+            sendResponse("Tinanggihan ang schedule request.", true);
+        } else {
+            sendResponse("Nabigong baguhin ang status ng schedule.", false);
         }
     } else {
         sendResponse("Invalid schedule ID.", false);
@@ -656,7 +835,7 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                                         <td class="text-end">
                                             <div class="btn-group">
                                                 <?php if ($b['status'] === 'Approved' || $b['status'] === 'Returned'): ?>
-                                                    <a href="print_borrow_request.php?group_id=<?= $b['request_group_id'] ?>" target="_blank" class="btn btn-sm btn-outline-dark rounded-pill px-2 me-1" title="Print Borrower Form"><i class="fa-solid fa-print"></i> Print</a>
+                                                    <a href="print_borrow_request.php?group_id=<?= $b['request_group_id'] ?>" class="btn btn-sm btn-outline-dark rounded-pill px-2 me-1" title="Print Borrower Form"><i class="fa-solid fa-print"></i> Print</a>
                                                 <?php endif; ?>
                                                 <form method="POST" action="" class="ajax-form d-inline">
                                                     <input type="hidden" name="action_borrow_request" value="1">
@@ -696,20 +875,28 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
             <div class="card p-4 border-0 shadow-sm rounded-4 mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-calendar-plus text-logo-blue me-2"></i>Magdagdag ng Bagong Whiteboard Schedule (Admin Posting)</h5>
-                    <a href="user_schedule.php" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">
+                    <a href="user_schedule.php" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">
                         <i class="fa-solid fa-eye me-1"></i> View Whiteboard Schedule
                     </a>
                 </div>
                 <form method="POST" action="" class="ajax-form bg-light p-3 rounded-3 border">
                     <input type="hidden" name="action_add_schedule" value="1">
                     <div class="row g-3">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label small fw-bold text-secondary">Department / Subject Code</label>
-                            <input type="text" name="department" class="form-control form-control-sm" placeholder="e.g., CRIM, HM, CBA, SAD, Dean">
+                            <input type="text" name="department" class="form-control form-control-sm" placeholder="e.g., CRIM, HM, CBA, SAD">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <label class="form-label small fw-bold text-secondary">Room / Venue</label>
+                            <input type="text" name="room" class="form-control form-control-sm" placeholder="e.g., Room 101, Lab A, Gym">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small fw-bold text-secondary">Equipment / Gamit</label>
+                            <input type="text" name="equipment" class="form-control form-control-sm" placeholder="e.g., Projector, Mic, Extension">
+                        </div>
+                        <div class="col-md-2">
                             <label class="form-label small fw-bold text-secondary">Title / Activity *</label>
-                            <input type="text" name="title" class="form-control form-control-sm" placeholder="e.g., 7:00-12:00, Class Schedule" required>
+                            <input type="text" name="title" class="form-control form-control-sm" placeholder="e.g., Class Schedule" required>
                         </div>
                         <div class="col-md-2">
                             <label class="form-label small fw-bold text-secondary">Event Date *</label>
@@ -719,8 +906,8 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                             <label class="form-label small fw-bold text-secondary">Time Slot</label>
                             <input type="text" name="scheduled_time" class="form-control form-control-sm" placeholder="e.g., 7:00 AM - 12:00 PM">
                         </div>
-                        <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-sm btn-logo-primary rounded-pill w-100 fw-bold">
+                        <div class="col-md-12 d-flex justify-content-end mt-2">
+                            <button type="submit" class="btn btn-sm btn-logo-primary rounded-pill px-4 fw-bold">
                                 <i class="fa-solid fa-plus me-1"></i> Add Schedule
                             </button>
                         </div>
@@ -737,41 +924,66 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                             <tr>
                                 <th>#</th>
                                 <th>Department</th>
+                                <th>Room / Venue</th>
+                                <th>Equipment / Gamit</th>
                                 <th>Title / Activity</th>
                                 <th>Date</th>
                                 <th>Time Slot</th>
+                                <th>Status</th>
                                 <th>Posted By</th>
                                 <th class="text-end">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="schedules-tbody">
                             <?php
                             $posted_cal = $conn->query("SELECT * FROM calendar_schedules ORDER BY event_date DESC, id DESC");
                             if ($posted_cal && $posted_cal->num_rows > 0):
                                 while ($pcal = $posted_cal->fetch_assoc()):
+                                    $st = $pcal['status'] ?? 'Approved';
+                                    $stClass = ($st === 'Approved') ? 'bg-success' : (($st === 'Rejected') ? 'bg-danger' : 'bg-warning text-dark');
                             ?>
                                 <tr>
                                     <td class="fw-bold text-secondary">#<?= $pcal['id'] ?></td>
                                     <td><span class="badge bg-danger text-white fw-bold"><?= htmlspecialchars($pcal['department'] ?: 'GENERAL') ?></span></td>
+                                    <td><span class="badge bg-info text-white fw-bold"><?= htmlspecialchars($pcal['room'] ?: 'N/A') ?></span></td>
+                                    <td><span class="badge bg-warning text-dark fw-bold"><?= htmlspecialchars($pcal['equipment'] ?: 'N/A') ?></span></td>
                                     <td class="fw-bold text-dark"><?= htmlspecialchars($pcal['title']) ?></td>
                                     <td class="fw-bold text-primary"><i class="fa-solid fa-calendar me-1"></i><?= htmlspecialchars($pcal['event_date']) ?></td>
                                     <td><span class="badge bg-light text-dark border"><?= htmlspecialchars($pcal['scheduled_time'] ?: 'N/A') ?></span></td>
+                                    <td><span class="badge <?= $stClass ?> px-3 py-2 fw-bold"><?= $st ?></span></td>
                                     <td class="small text-muted"><?= htmlspecialchars($pcal['created_by']) ?></td>
                                     <td class="text-end">
-                                        <form method="POST" action="" class="ajax-form d-inline">
-                                            <input type="hidden" name="action_delete_schedule" value="1">
-                                            <input type="hidden" name="schedule_id" value="<?= $pcal['id'] ?>">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold" onclick="return confirm('Sigurado ka bang burahin ang schedule na ito?');">
-                                                <i class="fa-solid fa-trash me-1"></i> Delete
-                                            </button>
-                                        </form>
+                                        <?php if ($st === 'Pending'): ?>
+                                            <form method="POST" action="" class="ajax-form d-inline me-1">
+                                                <input type="hidden" name="action_approve_schedule" value="1">
+                                                <input type="hidden" name="schedule_id" value="<?= $pcal['id'] ?>">
+                                                <button type="submit" class="btn btn-sm btn-success rounded-pill px-2 fw-bold" title="Approve Schedule">
+                                                    <i class="fa-solid fa-check"></i> Approve
+                                                </button>
+                                            </form>
+                                            <form method="POST" action="" class="ajax-form d-inline me-1">
+                                                <input type="hidden" name="action_reject_schedule" value="1">
+                                                <input type="hidden" name="schedule_id" value="<?= $pcal['id'] ?>">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2 fw-bold" title="Reject Schedule">
+                                                    <i class="fa-solid fa-xmark"></i> Reject
+                                                </button>
+                                            </form>
+                                        <?php else: ?>
+                                            <form method="POST" action="" class="ajax-form d-inline">
+                                                <input type="hidden" name="action_delete_schedule" value="1">
+                                                <input type="hidden" name="schedule_id" value="<?= $pcal['id'] ?>">
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary rounded-pill px-2 fw-bold" onclick="return confirm('Sigurado ka bang burahin ang schedule na ito?');">
+                                                    <i class="fa-solid fa-trash me-1"></i> Delete
+                                                </button>
+                                            </form>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php
                                 endwhile;
                             else:
                             ?>
-                                <tr><td colspan="7" class="text-center text-muted py-4">Walang nai-post na admin schedules.</td></tr>
+                                <tr><td colspan="10" class="text-center text-muted py-4">Walang nai-post na admin schedules.</td></tr>
                             <?php endif; ?>
                         </tbody>
                     </table>
@@ -796,17 +1008,6 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                             <?php
                             $all_schedules = [];
 
-                            // Borrow return schedules
-                            foreach ($borrow_requests_list as $b) {
-                                $all_schedules[] = [
-                                    'date' => $b['expected_return_date'],
-                                    'time' => $b['scheduled_time'] ?? '09:00 AM - 10:00 AM',
-                                    'type' => 'Borrow Return Deadline',
-                                    'id' => $b['request_group_id'],
-                                    'req' => $b['requisitioner_name'] . ' (' . $b['department'] . ')',
-                                    'details' => 'Return item: ' . $b['item_name'] . ' (x' . $b['quantity'] . ') - Status: ' . $b['status']
-                                ];
-                            }
 
                             // Printing schedules
                             foreach ($print_requests_list as $p) {
@@ -880,7 +1081,7 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                                         </td>
                                         <td>
                                             <?php if (!empty($p['document_file'])): ?>
-                                                <a href="uploads/<?= htmlspecialchars($p['document_file']) ?>" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold">
+                                                <a href="uploads/<?= htmlspecialchars($p['document_file']) ?>" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold">
                                                     <i class="fa-solid fa-file-pdf me-1"></i> View Document
                                                 </a>
                                             <?php else: ?>
@@ -1023,7 +1224,7 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                                 <th class="text-end">Print / Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="borrow-requests-tbody">
                             <?php if (!empty($all_history_requests)): ?>
                                 <?php foreach ($all_history_requests as $req): ?>
                                     <?php
@@ -1054,7 +1255,7 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                                         <td class="small text-secondary"><?= date('M d, Y h:i A', strtotime($req['created_at'])) ?></td>
                                         <td class="text-end">
                                             <?php if ($st === 'Approved'): ?>
-                                                <a href="<?= $print_link ?>" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-bold">
+                                                <a href="<?= $print_link ?>" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-bold">
                                                     <i class="fa-solid fa-print me-1"></i> Print Voucher
                                                 </a>
                                             <?php elseif ($st === 'Pending'): ?>
@@ -1252,8 +1453,10 @@ $(document).on('submit', '.ajax-form', function(e) {
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 `);
+                if (form.tagName.toLowerCase() === 'form') {
+                    form.reset();
+                }
                 pollRequests();
-                setTimeout(function() { location.reload(); }, 1000);
             } else {
                 var errorMsg = (response && response.message) ? response.message : 'Nagkaroon ng problema sa pag-update.';
                 alert(errorMsg);
@@ -1267,6 +1470,7 @@ $(document).on('submit', '.ajax-form', function(e) {
 
 let lastOfficeCount = null;
 let lastMaintCount = null;
+let lastScheduleCount = null;
 
 function triggerDesktopNotification(title, message) {
     if (window.Notification && Notification.permission === "granted") {
@@ -1291,8 +1495,6 @@ function pollRequests() {
             let currentCount = tempDiv.find('tr').length;
             if (tempDiv.find('td[colspan]').length > 0) currentCount = 0;
 
-            $('#office-tab-badge').text(currentCount);
-
             if (lastOfficeCount !== null && currentCount > lastOfficeCount) {
                 triggerDesktopNotification("Bagong Office Order!", "May pumasok na bagong order para sa Office Supplies.");
             }
@@ -1310,17 +1512,48 @@ function pollRequests() {
             let currentCount = tempDiv.find('tr').length;
             if (tempDiv.find('td[colspan]').length > 0) currentCount = 0;
 
-            $('#maint-tab-badge').text(currentCount);
-
             if (lastMaintCount !== null && currentCount > lastMaintCount) {
                 triggerDesktopNotification("Bagong Maintenance Order!", "May pumasok na bagong order para sa Maintenance.");
             }
             lastMaintCount = currentCount;
         }
     });
+
+    $.ajax({
+        url: window.location.pathname + '?fetch_requests=1&type=schedules',
+        type: 'GET',
+        success: function(data) {
+            $('#schedules-tbody').html(data);
+
+            let tempDiv = $('<div>').html(data);
+            let currentCount = tempDiv.find('tr').length;
+            if (tempDiv.find('td[colspan]').length > 0) currentCount = 0;
+
+            if (lastScheduleCount !== null && currentCount > lastScheduleCount) {
+                triggerDesktopNotification("Bagong Schedule Request!", "May pumasok na bagong schedule request mula sa user.");
+            }
+            lastScheduleCount = currentCount;
+        }
+    });
+
+    $.ajax({
+        url: window.location.pathname + '?fetch_requests=1&type=borrow',
+        type: 'GET',
+        success: function(data) {
+            $('#borrow-requests-tbody').html(data);
+        }
+    });
+
+    $.ajax({
+        url: window.location.pathname + '?fetch_requests=1&type=print',
+        type: 'GET',
+        success: function(data) {
+            $('#print-requests-tbody').html(data);
+        }
+    });
 }
 
-setInterval(pollRequests, 5000);
+setInterval(pollRequests, 3000);
 </script>
 </body>
 </html>
