@@ -315,6 +315,7 @@ if (!$conn->connect_error) {
             title TEXT NOT NULL,
             department TEXT NULL,
             room TEXT NULL,
+            equipment TEXT NULL,
             event_date DATE NOT NULL,
             scheduled_time TEXT NULL,
             details TEXT NULL,
@@ -324,6 +325,7 @@ if (!$conn->connect_error) {
     ");
 
     @$conn->query("ALTER TABLE calendar_schedules ADD COLUMN room TEXT NULL");
+    @$conn->query("ALTER TABLE calendar_schedules ADD COLUMN equipment TEXT NULL");
 
     // Seed default admin and user if users table is empty
     $check_users = $conn->query("SELECT COUNT(*) as cnt FROM users");

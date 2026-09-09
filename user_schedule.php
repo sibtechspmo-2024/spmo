@@ -93,14 +93,15 @@ for ($d = 1; $d <= $days_in_month; $d++) {
     $day_events_map[$d] = [];
     if (isset($admin_schedules[$d])) {
         foreach ($admin_schedules[$d] as $as) {
-            $dept_room = trim(($as['department'] ? $as['department'] : '') . ($as['room'] ? ' (' . $as['room'] . ')' : ''));
+            $dept_room_eq = trim(($as['department'] ? $as['department'] : '') . ($as['room'] ? ' (' . $as['room'] . ')' : '') . ($as['equipment'] ? ' [' . $as['equipment'] . ']' : ''));
             $day_events_map[$d][] = [
                 'category' => 'Admin Posting',
-                'title' => ($dept_room ? '[' . $dept_room . '] ' : '') . $as['title'],
+                'title' => ($dept_room_eq ? '[' . $dept_room_eq . '] ' : '') . $as['title'],
                 'time' => $as['scheduled_time'] ?? 'All Day',
                 'details' => $as['details'] ?? '',
-                'requisitioner' => $dept_room ?: 'Admin Posting',
+                'requisitioner' => $dept_room_eq ?: 'Admin Posting',
                 'room' => $as['room'] ?? '',
+                'equipment' => $as['equipment'] ?? '',
                 'badge' => 'bg-danger text-white',
                 'is_admin' => true
             ];
@@ -519,6 +520,7 @@ function openDayBreakdown(dateStr, events) {
             var iconClass = ev.is_admin ? 'bi-pin-angle-fill text-danger' : 'bi-clock-history text-primary';
             var bgBadge = ev.is_admin ? 'bg-danger' : 'bg-primary';
             var roomInfo = ev.room ? `<span class="badge bg-info text-white ms-2"><i class="bi bi-door-open-fill me-1"></i>${ev.room}</span>` : '';
+            var equipInfo = ev.equipment ? `<span class="badge bg-warning text-dark ms-2"><i class="bi bi-tools me-1"></i>${ev.equipment}</span>` : '';
 
             html += `
                 <div class="list-group-item p-3 mb-2 rounded-3 border bg-light shadow-sm">
@@ -528,6 +530,7 @@ function openDayBreakdown(dateStr, events) {
                                 <i class="bi ${iconClass} text-white me-1"></i>${ev.category}
                             </span>
                             ${roomInfo}
+                            ${equipInfo}
                         </div>
                         <span class="badge bg-white text-dark border px-3 py-1 fw-bold"><i class="bi bi-clock me-1 text-primary"></i>${ev.time}</span>
                     </div>

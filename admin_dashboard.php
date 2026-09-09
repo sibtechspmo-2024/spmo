@@ -157,13 +157,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_add_schedule']
     $title = trim($_POST['title'] ?? '');
     $department = trim($_POST['department'] ?? '');
     $room = trim($_POST['room'] ?? '');
+    $equipment = trim($_POST['equipment'] ?? '');
     $event_date = trim($_POST['event_date'] ?? '');
     $scheduled_time = trim($_POST['scheduled_time'] ?? '');
     $details = trim($_POST['details'] ?? '');
 
     if (!empty($title) && !empty($event_date)) {
-        $stmt_cal = $conn->prepare("INSERT INTO calendar_schedules (title, department, room, event_date, scheduled_time, details, created_by) VALUES (?, ?, ?, ?, ?, ?, 'Admin')");
-        $stmt_cal->bind_param("ssssss", $title, $department, $room, $event_date, $scheduled_time, $details);
+        $stmt_cal = $conn->prepare("INSERT INTO calendar_schedules (title, department, room, equipment, event_date, scheduled_time, details, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, 'Admin')");
+        $stmt_cal->bind_param("sssssss", $title, $department, $room, $equipment, $event_date, $scheduled_time, $details);
         if ($stmt_cal->execute()) {
             sendResponse("Matagumpay na naidagdag ang bagong schedule sa kalendaryo!", true);
         } else {
@@ -712,9 +713,13 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                             <label class="form-label small fw-bold text-secondary">Room / Venue</label>
                             <input type="text" name="room" class="form-control form-control-sm" placeholder="e.g., Room 101, Lab A, Gym">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <label class="form-label small fw-bold text-secondary">Equipment / Gamit</label>
+                            <input type="text" name="equipment" class="form-control form-control-sm" placeholder="e.g., Projector, Mic, Extension">
+                        </div>
+                        <div class="col-md-2">
                             <label class="form-label small fw-bold text-secondary">Title / Activity *</label>
-                            <input type="text" name="title" class="form-control form-control-sm" placeholder="e.g., 7:00-12:00, Class Schedule" required>
+                            <input type="text" name="title" class="form-control form-control-sm" placeholder="e.g., Class Schedule" required>
                         </div>
                         <div class="col-md-2">
                             <label class="form-label small fw-bold text-secondary">Event Date *</label>
@@ -724,9 +729,9 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                             <label class="form-label small fw-bold text-secondary">Time Slot</label>
                             <input type="text" name="scheduled_time" class="form-control form-control-sm" placeholder="e.g., 7:00 AM - 12:00 PM">
                         </div>
-                        <div class="col-md-1 d-flex align-items-end">
-                            <button type="submit" class="btn btn-sm btn-logo-primary rounded-pill w-100 fw-bold px-2">
-                                <i class="fa-solid fa-plus"></i> Add
+                        <div class="col-md-12 d-flex justify-content-end mt-2">
+                            <button type="submit" class="btn btn-sm btn-logo-primary rounded-pill px-4 fw-bold">
+                                <i class="fa-solid fa-plus me-1"></i> Add Schedule
                             </button>
                         </div>
                     </div>
@@ -743,6 +748,7 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                                 <th>#</th>
                                 <th>Department</th>
                                 <th>Room / Venue</th>
+                                <th>Equipment / Gamit</th>
                                 <th>Title / Activity</th>
                                 <th>Date</th>
                                 <th>Time Slot</th>
@@ -760,6 +766,7 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                                     <td class="fw-bold text-secondary">#<?= $pcal['id'] ?></td>
                                     <td><span class="badge bg-danger text-white fw-bold"><?= htmlspecialchars($pcal['department'] ?: 'GENERAL') ?></span></td>
                                     <td><span class="badge bg-info text-white fw-bold"><?= htmlspecialchars($pcal['room'] ?: 'N/A') ?></span></td>
+                                    <td><span class="badge bg-warning text-dark fw-bold"><?= htmlspecialchars($pcal['equipment'] ?: 'N/A') ?></span></td>
                                     <td class="fw-bold text-dark"><?= htmlspecialchars($pcal['title']) ?></td>
                                     <td class="fw-bold text-primary"><i class="fa-solid fa-calendar me-1"></i><?= htmlspecialchars($pcal['event_date']) ?></td>
                                     <td><span class="badge bg-light text-dark border"><?= htmlspecialchars($pcal['scheduled_time'] ?: 'N/A') ?></span></td>
@@ -778,7 +785,7 @@ $is_req_hist = isset($_GET['req_status']) || isset($_GET['req_cat']);
                                 endwhile;
                             else:
                             ?>
-                                <tr><td colspan="8" class="text-center text-muted py-4">Walang nai-post na admin schedules.</td></tr>
+                                <tr><td colspan="9" class="text-center text-muted py-4">Walang nai-post na admin schedules.</td></tr>
                             <?php endif; ?>
                         </tbody>
                     </table>
