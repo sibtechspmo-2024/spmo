@@ -1,1 +1,651 @@
-[Wed Sep  9 05:46:23 2026] Failed to listen on localhost:8000 (reason: Address already in use)
+[Tue Sep  8 00:19:51 2026] PHP 8.3.6 Development Server (http://localhost:8000) started
+[Tue Sep  8 00:20:10 2026] [::1]:34724 Accepted
+[Tue Sep  8 00:20:10 2026] [::1]:34724 [200]: HEAD /user_schedule.php
+[Tue Sep  8 00:20:10 2026] [::1]:34724 Closing
+[Tue Sep  8 00:20:52 2026] [::1]:41576 Accepted
+[Tue Sep  8 00:20:52 2026] [::1]:41576 [200]: GET /index.php
+[Tue Sep  8 00:20:52 2026] [::1]:41576 Closing
+[Tue Sep  8 00:22:13 2026] [::1]:57960 Accepted
+[Tue Sep  8 00:22:13 2026] [::1]:57960 [200]: GET /index.php
+[Tue Sep  8 00:22:13 2026] [::1]:57960 Closing
+[Tue Sep  8 00:23:09 2026] [::1]:33938 Accepted
+[Tue Sep  8 00:23:09 2026] [::1]:33938 [200]: GET /index.php
+[Tue Sep  8 00:23:09 2026] [::1]:33938 Closing
+[Tue Sep  8 00:23:57 2026] [::1]:58062 Accepted
+[Tue Sep  8 00:23:57 2026] [::1]:58062 [200]: GET /index.php
+[Tue Sep  8 00:23:57 2026] [::1]:58062 Closing
+[Tue Sep  8 00:26:44 2026] [::1]:35954 Accepted
+[Tue Sep  8 00:26:44 2026] [::1]:35954 [200]: GET /index.php
+[Tue Sep  8 00:26:44 2026] [::1]:35954 Closing
+[Tue Sep  8 00:27:03 2026] [::1]:59066 Accepted
+[Tue Sep  8 00:27:03 2026] [::1]:59066 [200]: GET /index.php
+[Tue Sep  8 00:27:03 2026] [::1]:59066 Closing
+[Tue Sep  8 00:27:03 2026] [::1]:59072 Accepted
+[Tue Sep  8 00:27:03 2026] [::1]:59080 Accepted
+[Tue Sep  8 00:27:03 2026] [::1]:59072 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 00:27:03 2026] [::1]:59072 Closing
+[Tue Sep  8 00:27:03 2026] [::1]:59080 [200]: GET /logo.jpg
+[Tue Sep  8 00:27:03 2026] [::1]:59080 Closing
+[Tue Sep  8 00:27:04 2026] [::1]:59086 Accepted
+[Tue Sep  8 00:27:04 2026] [::1]:59086 [302]: POST /index.php
+[Tue Sep  8 00:27:04 2026] [::1]:59086 Closing
+[Tue Sep  8 00:27:04 2026] [::1]:59098 Accepted
+[Tue Sep  8 00:27:04 2026] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on false in /app/admin_dashboard.php:349
+Stack trace:
+#0 {main}
+  thrown in /app/admin_dashboard.php on line 349
+[Tue Sep  8 00:27:04 2026] [::1]:59098 [500]: GET /admin_dashboard.php - Uncaught Error: Call to a member function fetch_assoc() on false in /app/admin_dashboard.php:349
+Stack trace:
+#0 {main}
+  thrown in /app/admin_dashboard.php on line 349
+[Tue Sep  8 00:27:04 2026] [::1]:59098 Closing
+[Tue Sep  8 00:27:05 2026] [::1]:59104 Accepted
+[Tue Sep  8 00:27:05 2026] [::1]:59104 [302]: GET /user_schedule.php
+[Tue Sep  8 00:27:05 2026] [::1]:59104 Closing
+[Tue Sep  8 00:27:05 2026] [::1]:59118 Accepted
+[Tue Sep  8 00:27:05 2026] [::1]:59118 [200]: GET /index.php
+[Tue Sep  8 00:27:05 2026] [::1]:59118 Closing
+[Tue Sep  8 00:27:05 2026] [::1]:59134 Accepted
+[Tue Sep  8 00:27:05 2026] [::1]:59150 Accepted
+[Tue Sep  8 00:27:05 2026] [::1]:59134 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 00:27:05 2026] [::1]:59134 Closing
+[Tue Sep  8 00:27:05 2026] [::1]:59150 [200]: GET /logo.jpg
+[Tue Sep  8 00:27:05 2026] [::1]:59150 Closing
+[Tue Sep  8 00:47:20 2026] [::1]:53124 Accepted
+[Tue Sep  8 00:47:20 2026] [::1]:53124 [200]: GET /index.php
+[Tue Sep  8 00:47:20 2026] [::1]:53124 Closing
+[Tue Sep  8 00:47:20 2026] [::1]:53134 Accepted
+[Tue Sep  8 00:47:20 2026] [::1]:53146 Accepted
+[Tue Sep  8 00:47:20 2026] [::1]:53134 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 00:47:20 2026] [::1]:53134 Closing
+[Tue Sep  8 00:47:20 2026] [::1]:53146 [200]: GET /logo.jpg
+[Tue Sep  8 00:47:20 2026] [::1]:53146 Closing
+[Tue Sep  8 00:47:21 2026] [::1]:53148 Accepted
+[Tue Sep  8 00:47:21 2026] [::1]:53148 [302]: POST /index.php
+[Tue Sep  8 00:47:21 2026] [::1]:53148 Closing
+[Tue Sep  8 00:47:21 2026] [::1]:53164 Accepted
+[Tue Sep  8 00:47:21 2026] PHP Fatal error:  Uncaught Error: Call to undefined method SQLiteDBResult::data_seek() in /app/admin_dashboard.php:781
+Stack trace:
+#0 {main}
+  thrown in /app/admin_dashboard.php on line 781
+[Tue Sep  8 00:47:21 2026] [::1]:53164 [200]: GET /admin_dashboard.php - Uncaught Error: Call to undefined method SQLiteDBResult::data_seek() in /app/admin_dashboard.php:781
+Stack trace:
+#0 {main}
+  thrown in /app/admin_dashboard.php on line 781
+[Tue Sep  8 00:47:21 2026] [::1]:53164 Closing
+[Tue Sep  8 00:47:21 2026] [::1]:53176 Accepted
+[Tue Sep  8 00:47:21 2026] [::1]:53182 Accepted
+[Tue Sep  8 00:47:21 2026] [::1]:53176 [404]: GET /css/admin_dashboard.css - No such file or directory
+[Tue Sep  8 00:47:21 2026] [::1]:53176 Closing
+[Tue Sep  8 00:47:21 2026] [::1]:53182 [200]: GET /logo.jpg
+[Tue Sep  8 00:47:21 2026] [::1]:53182 Closing
+[Tue Sep  8 00:47:22 2026] [::1]:53196 Accepted
+[Tue Sep  8 00:47:22 2026] [::1]:53196 [302]: GET /user_schedule.php
+[Tue Sep  8 00:47:22 2026] [::1]:53196 Closing
+[Tue Sep  8 00:47:22 2026] [::1]:53204 Accepted
+[Tue Sep  8 00:47:22 2026] [::1]:53204 [200]: GET /index.php
+[Tue Sep  8 00:47:22 2026] [::1]:53204 Closing
+[Tue Sep  8 00:47:22 2026] [::1]:53214 Accepted
+[Tue Sep  8 00:47:22 2026] [::1]:53220 Accepted
+[Tue Sep  8 00:47:22 2026] [::1]:53214 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 00:47:22 2026] [::1]:53214 Closing
+[Tue Sep  8 00:47:22 2026] [::1]:53220 [200]: GET /logo.jpg
+[Tue Sep  8 00:47:22 2026] [::1]:53220 Closing
+[Tue Sep  8 01:56:33 2026] [::1]:44096 Accepted
+[Tue Sep  8 01:56:33 2026] [::1]:44096 [200]: GET /index.php
+[Tue Sep  8 01:56:33 2026] [::1]:44096 Closing
+[Tue Sep  8 01:56:33 2026] [::1]:44102 Accepted
+[Tue Sep  8 01:56:33 2026] [::1]:44108 Accepted
+[Tue Sep  8 01:56:33 2026] [::1]:44102 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 01:56:33 2026] [::1]:44102 Closing
+[Tue Sep  8 01:56:33 2026] [::1]:44108 [200]: GET /logo.jpg
+[Tue Sep  8 01:56:33 2026] [::1]:44108 Closing
+[Tue Sep  8 01:56:33 2026] [::1]:44124 Accepted
+[Tue Sep  8 01:56:33 2026] [::1]:44124 [302]: POST /index.php
+[Tue Sep  8 01:56:33 2026] [::1]:44124 Closing
+[Tue Sep  8 01:56:33 2026] [::1]:44132 Accepted
+[Tue Sep  8 01:56:33 2026] [::1]:44132 [200]: GET /admin_dashboard.php
+[Tue Sep  8 01:56:33 2026] [::1]:44132 Closing
+[Tue Sep  8 01:56:33 2026] [::1]:44136 Accepted
+[Tue Sep  8 01:56:33 2026] [::1]:44146 Accepted
+[Tue Sep  8 01:56:33 2026] [::1]:44136 [404]: GET /css/admin_dashboard.css - No such file or directory
+[Tue Sep  8 01:56:33 2026] [::1]:44136 Closing
+[Tue Sep  8 01:56:33 2026] [::1]:44146 [200]: GET /logo.jpg
+[Tue Sep  8 01:56:33 2026] [::1]:44146 Closing
+[Tue Sep  8 01:56:33 2026] [::1]:44154 Accepted
+[Tue Sep  8 01:56:33 2026] [::1]:44154 [200]: GET /sw.js
+[Tue Sep  8 01:56:33 2026] [::1]:44154 Closing
+[Tue Sep  8 01:56:34 2026] [::1]:44168 Accepted
+[Tue Sep  8 01:56:34 2026] [::1]:44182 Accepted
+[Tue Sep  8 01:56:34 2026] [::1]:44196 Accepted
+[Tue Sep  8 01:56:34 2026] [::1]:44168 [200]: GET /
+[Tue Sep  8 01:56:34 2026] [::1]:44168 Closing
+[Tue Sep  8 01:56:34 2026] [::1]:44182 [200]: GET /index.php
+[Tue Sep  8 01:56:34 2026] [::1]:44182 Closing
+[Tue Sep  8 01:56:34 2026] [::1]:44196 [200]: GET /manifest.json
+[Tue Sep  8 01:56:34 2026] [::1]:44196 Closing
+[Tue Sep  8 01:56:34 2026] [::1]:44200 Accepted
+[Tue Sep  8 01:56:34 2026] [::1]:44204 Accepted
+[Tue Sep  8 01:56:34 2026] [::1]:44208 Accepted
+[Tue Sep  8 01:56:34 2026] [::1]:44200 [200]: GET /logo.jpg
+[Tue Sep  8 01:56:34 2026] [::1]:44204 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 01:56:34 2026] [::1]:44204 Closing
+[Tue Sep  8 01:56:34 2026] [::1]:44208 [404]: GET /css/user_dashboard.css - No such file or directory
+[Tue Sep  8 01:56:34 2026] [::1]:44200 Closing
+[Tue Sep  8 01:56:34 2026] [::1]:44208 Closing
+[Tue Sep  8 01:56:34 2026] [::1]:44222 Accepted
+[Tue Sep  8 01:56:34 2026] [::1]:44228 Accepted
+[Tue Sep  8 01:56:34 2026] [::1]:44238 Accepted
+[Tue Sep  8 01:56:34 2026] [::1]:44250 Accepted
+[Tue Sep  8 01:56:34 2026] [::1]:44262 Accepted
+[Tue Sep  8 01:56:34 2026] [::1]:44266 Accepted
+[Tue Sep  8 01:56:34 2026] [::1]:44222 [302]: GET /user_schedule.php
+[Tue Sep  8 01:56:34 2026] [::1]:44222 Closing
+[Tue Sep  8 01:56:34 2026] [::1]:44228 [200]: GET /index.php
+[Tue Sep  8 01:56:34 2026] [::1]:44228 Closing
+[Tue Sep  8 01:56:34 2026] [::1]:44238 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 01:56:34 2026] [::1]:44238 Closing
+[Tue Sep  8 01:56:34 2026] [::1]:44250 [200]: GET /logo.jpg
+[Tue Sep  8 01:56:34 2026] [::1]:44250 Closing
+[Tue Sep  8 01:56:36 2026] [::1]:44262 [200]: GET /sw.js
+[Tue Sep  8 01:56:36 2026] [::1]:44262 Closing
+[Tue Sep  8 01:56:36 2026] [::1]:44266 Closed without sending a request; it was probably just an unused speculative preconnection
+[Tue Sep  8 01:56:36 2026] [::1]:44266 Closing
+[Tue Sep  8 02:18:57 2026] [::1]:43676 Accepted
+[Tue Sep  8 02:18:57 2026] [::1]:43676 [302]: GET /user_schedule.php
+[Tue Sep  8 02:18:57 2026] [::1]:43676 Closing
+[Tue Sep  8 02:18:57 2026] [::1]:43684 Accepted
+[Tue Sep  8 02:18:57 2026] [::1]:43684 [200]: GET /index.php
+[Tue Sep  8 02:18:57 2026] [::1]:43684 Closing
+[Tue Sep  8 02:18:57 2026] [::1]:43700 Accepted
+[Tue Sep  8 02:18:57 2026] [::1]:43702 Accepted
+[Tue Sep  8 02:18:57 2026] [::1]:43700 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 02:18:58 2026] [::1]:43702 [200]: GET /logo.jpg
+[Tue Sep  8 02:18:58 2026] [::1]:43700 Closing
+[Tue Sep  8 02:18:58 2026] [::1]:43702 Closing
+[Tue Sep  8 02:37:40 2026] [::1]:56928 Accepted
+[Tue Sep  8 02:37:40 2026] [::1]:56928 [200]: GET /index.php
+[Tue Sep  8 02:37:40 2026] [::1]:56928 Closing
+[Tue Sep  8 02:37:40 2026] [::1]:56944 Accepted
+[Tue Sep  8 02:37:40 2026] [::1]:56948 Accepted
+[Tue Sep  8 02:37:40 2026] [::1]:56944 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 02:37:40 2026] [::1]:56948 [200]: GET /logo.jpg
+[Tue Sep  8 02:37:40 2026] [::1]:56944 Closing
+[Tue Sep  8 02:37:40 2026] [::1]:56948 Closing
+[Tue Sep  8 02:37:41 2026] [::1]:56958 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:56958 [302]: POST /index.php
+[Tue Sep  8 02:37:41 2026] [::1]:56958 Closing
+[Tue Sep  8 02:37:41 2026] [::1]:56972 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:56972 [200]: GET /user_dashboard.php
+[Tue Sep  8 02:37:41 2026] [::1]:56972 Closing
+[Tue Sep  8 02:37:41 2026] [::1]:56988 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:57000 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:56988 [404]: GET /css/user_dashboard.css - No such file or directory
+[Tue Sep  8 02:37:41 2026] [::1]:57000 [200]: GET /logo.jpg
+[Tue Sep  8 02:37:41 2026] [::1]:56988 Closing
+[Tue Sep  8 02:37:41 2026] [::1]:57000 Closing
+[Tue Sep  8 02:37:41 2026] [::1]:57012 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:57012 [200]: GET /user_dashboard.php?action=get_notifications
+[Tue Sep  8 02:37:41 2026] [::1]:57012 Closing
+[Tue Sep  8 02:37:41 2026] [::1]:57024 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:57024 [200]: GET /sw.js
+[Tue Sep  8 02:37:41 2026] [::1]:57024 Closing
+[Tue Sep  8 02:37:41 2026] [::1]:57038 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:57042 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:57046 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:57038 [200]: GET /
+[Tue Sep  8 02:37:41 2026] [::1]:57038 Closing
+[Tue Sep  8 02:37:41 2026] [::1]:57042 [200]: GET /index.php
+[Tue Sep  8 02:37:41 2026] [::1]:57042 Closing
+[Tue Sep  8 02:37:41 2026] [::1]:57046 [200]: GET /manifest.json
+[Tue Sep  8 02:37:41 2026] [::1]:57046 Closing
+[Tue Sep  8 02:37:41 2026] [::1]:57062 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:57070 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:57072 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:57062 [200]: GET /logo.jpg
+[Tue Sep  8 02:37:41 2026] [::1]:57070 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 02:37:41 2026] [::1]:57070 Closing
+[Tue Sep  8 02:37:41 2026] [::1]:57072 [404]: GET /css/user_dashboard.css - No such file or directory
+[Tue Sep  8 02:37:41 2026] [::1]:57072 Closing
+[Tue Sep  8 02:37:41 2026] [::1]:57062 Closing
+[Tue Sep  8 02:37:41 2026] [::1]:57082 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:57082 [404]: GET /css/admin_dashboard.css - No such file or directory
+[Tue Sep  8 02:37:41 2026] [::1]:57082 Closing
+[Tue Sep  8 02:37:41 2026] [::1]:57092 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:57096 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:57108 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:57124 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:57138 Accepted
+[Tue Sep  8 02:37:41 2026] [::1]:57146 Accepted
+[Tue Sep  8 02:37:42 2026] [::1]:57092 [200]: GET /print_borrow_request.php?group_id=BRW-TEST1234
+[Tue Sep  8 02:37:42 2026] [::1]:57092 Closing
+[Tue Sep  8 02:37:42 2026] [::1]:57096 [200]: GET /logo.jpg
+[Tue Sep  8 02:37:42 2026] [::1]:57096 Closing
+[Tue Sep  8 02:37:43 2026] [::1]:57108 [200]: GET /sw.js
+[Tue Sep  8 02:37:43 2026] [::1]:57108 Closing
+[Tue Sep  8 02:37:44 2026] [::1]:57124 Closed without sending a request; it was probably just an unused speculative preconnection
+[Tue Sep  8 02:37:44 2026] [::1]:57124 Closing
+[Tue Sep  8 02:37:44 2026] [::1]:57138 Closed without sending a request; it was probably just an unused speculative preconnection
+[Tue Sep  8 02:37:44 2026] [::1]:57138 Closing
+[Tue Sep  8 02:37:44 2026] [::1]:57146 Closed without sending a request; it was probably just an unused speculative preconnection
+[Tue Sep  8 02:37:44 2026] [::1]:57146 Closing
+[Tue Sep  8 03:13:20 2026] [::1]:53372 Accepted
+[Tue Sep  8 03:13:20 2026] [::1]:53372 [302]: POST /admin_dashboard.php
+[Tue Sep  8 03:13:20 2026] [::1]:53372 Closing
+[Tue Sep  8 03:13:42 2026] [::1]:43598 Accepted
+[Tue Sep  8 03:13:42 2026] [::1]:43598 [200]: POST /index.php
+[Tue Sep  8 03:13:42 2026] [::1]:43598 Closing
+[Tue Sep  8 03:14:02 2026] [::1]:56860 Accepted
+[Tue Sep  8 03:14:02 2026] [::1]:56860 [302]: POST /index.php
+[Tue Sep  8 03:14:02 2026] [::1]:56860 Closing
+[Tue Sep  8 03:14:23 2026] [::1]:37060 Accepted
+[Tue Sep  8 03:14:23 2026] [::1]:37060 [200]: POST /admin_dashboard.php
+[Tue Sep  8 03:14:23 2026] [::1]:37060 Closing
+[Tue Sep  8 03:17:29 2026] [::1]:41870 Accepted
+[Tue Sep  8 03:17:29 2026] [::1]:41870 [200]: GET /index.php
+[Tue Sep  8 03:17:29 2026] [::1]:41870 Closing
+[Tue Sep  8 03:17:29 2026] [::1]:41884 Accepted
+[Tue Sep  8 03:17:29 2026] [::1]:41894 Accepted
+[Tue Sep  8 03:17:29 2026] [::1]:41884 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 03:17:29 2026] [::1]:41894 [200]: GET /logo.jpg
+[Tue Sep  8 03:17:29 2026] [::1]:41884 Closing
+[Tue Sep  8 03:17:29 2026] [::1]:41894 Closing
+[Tue Sep  8 03:17:31 2026] [::1]:41908 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:41908 [302]: POST /index.php
+[Tue Sep  8 03:17:31 2026] [::1]:41908 Closing
+[Tue Sep  8 03:17:31 2026] [::1]:41924 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:41924 [200]: GET /admin_dashboard.php
+[Tue Sep  8 03:17:31 2026] [::1]:41924 Closing
+[Tue Sep  8 03:17:31 2026] [::1]:41940 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:41940 [404]: GET /css/admin_dashboard.css - No such file or directory
+[Tue Sep  8 03:17:31 2026] [::1]:41940 Closing
+[Tue Sep  8 03:17:31 2026] [::1]:41954 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:41954 [200]: GET /logo.jpg
+[Tue Sep  8 03:17:31 2026] [::1]:41954 Closing
+[Tue Sep  8 03:17:31 2026] [::1]:41960 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:41960 [200]: GET /sw.js
+[Tue Sep  8 03:17:31 2026] [::1]:41960 Closing
+[Tue Sep  8 03:17:31 2026] [::1]:41964 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:41968 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:41972 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:41964 [200]: GET /
+[Tue Sep  8 03:17:31 2026] [::1]:41964 Closing
+[Tue Sep  8 03:17:31 2026] [::1]:41968 [200]: GET /index.php
+[Tue Sep  8 03:17:31 2026] [::1]:41968 Closing
+[Tue Sep  8 03:17:31 2026] [::1]:41972 [200]: GET /manifest.json
+[Tue Sep  8 03:17:31 2026] [::1]:41972 Closing
+[Tue Sep  8 03:17:31 2026] [::1]:41976 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:41976 [200]: GET /logo.jpg
+[Tue Sep  8 03:17:31 2026] [::1]:41976 Closing
+[Tue Sep  8 03:17:31 2026] [::1]:41992 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:42008 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:41992 [404]: GET /css/user_dashboard.css - No such file or directory
+[Tue Sep  8 03:17:31 2026] [::1]:41992 Closing
+[Tue Sep  8 03:17:31 2026] [::1]:42008 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 03:17:31 2026] [::1]:42008 Closing
+[Tue Sep  8 03:17:31 2026] [::1]:42024 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:42032 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:42038 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:42054 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:42068 Accepted
+[Tue Sep  8 03:17:31 2026] [::1]:42074 Accepted
+[Tue Sep  8 03:17:34 2026] [::1]:42032 [200]: POST /admin_dashboard.php
+[Tue Sep  8 03:17:34 2026] [::1]:42032 Closing
+[Tue Sep  8 03:17:34 2026] [::1]:42038 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:17:34 2026] [::1]:42038 Closing
+[Tue Sep  8 03:17:34 2026] [::1]:42054 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:17:34 2026] [::1]:42054 Closing
+[Tue Sep  8 03:17:35 2026] [::1]:42068 [200]: GET /admin_dashboard.php
+[Tue Sep  8 03:17:35 2026] [::1]:42068 Closing
+[Tue Sep  8 03:17:35 2026] [::1]:42074 [404]: GET /css/admin_dashboard.css - No such file or directory
+[Tue Sep  8 03:17:35 2026] [::1]:42074 Closing
+[Tue Sep  8 03:17:35 2026] [::1]:42024 [200]: GET /logo.jpg
+[Tue Sep  8 03:17:35 2026] [::1]:42024 Closing
+[Tue Sep  8 03:17:36 2026] [::1]:34702 Accepted
+[Tue Sep  8 03:17:36 2026] [::1]:34702 [200]: GET /sw.js
+[Tue Sep  8 03:17:36 2026] [::1]:34702 Closing
+[Tue Sep  8 03:17:40 2026] [::1]:34714 Accepted
+[Tue Sep  8 03:17:40 2026] [::1]:34714 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:17:40 2026] [::1]:34714 Closing
+[Tue Sep  8 03:17:40 2026] [::1]:34728 Accepted
+[Tue Sep  8 03:17:40 2026] [::1]:34728 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:17:40 2026] [::1]:34728 Closing
+[Tue Sep  8 03:17:45 2026] [::1]:56328 Accepted
+[Tue Sep  8 03:17:45 2026] [::1]:56332 Accepted
+[Tue Sep  8 03:17:45 2026] [::1]:56328 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:17:45 2026] [::1]:56328 Closing
+[Tue Sep  8 03:17:45 2026] [::1]:56332 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:17:45 2026] [::1]:56332 Closing
+[Tue Sep  8 03:17:50 2026] [::1]:56346 Accepted
+[Tue Sep  8 03:17:50 2026] [::1]:56360 Accepted
+[Tue Sep  8 03:17:50 2026] [::1]:56346 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:17:50 2026] [::1]:56346 Closing
+[Tue Sep  8 03:17:50 2026] [::1]:56360 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:17:50 2026] [::1]:56360 Closing
+[Tue Sep  8 03:17:55 2026] [::1]:42688 Accepted
+[Tue Sep  8 03:17:55 2026] [::1]:42698 Accepted
+[Tue Sep  8 03:17:55 2026] [::1]:42688 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:17:55 2026] [::1]:42688 Closing
+[Tue Sep  8 03:17:55 2026] [::1]:42698 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:17:55 2026] [::1]:42698 Closing
+[Tue Sep  8 03:18:00 2026] [::1]:42700 Accepted
+[Tue Sep  8 03:18:00 2026] [::1]:42716 Accepted
+[Tue Sep  8 03:18:00 2026] [::1]:42700 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:18:00 2026] [::1]:42700 Closing
+[Tue Sep  8 03:18:00 2026] [::1]:42716 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:18:00 2026] [::1]:42716 Closing
+[Tue Sep  8 03:18:05 2026] [::1]:53550 Accepted
+[Tue Sep  8 03:18:05 2026] [::1]:53564 Accepted
+[Tue Sep  8 03:18:05 2026] [::1]:53550 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:18:05 2026] [::1]:53550 Closing
+[Tue Sep  8 03:18:05 2026] [::1]:53564 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:18:05 2026] [::1]:53564 Closing
+[Tue Sep  8 03:18:52 2026] [::1]:60534 Accepted
+[Tue Sep  8 03:18:52 2026] [::1]:60534 [200]: GET /index.php
+[Tue Sep  8 03:18:52 2026] [::1]:60534 Closing
+[Tue Sep  8 03:18:52 2026] [::1]:60544 Accepted
+[Tue Sep  8 03:18:52 2026] [::1]:60560 Accepted
+[Tue Sep  8 03:18:52 2026] [::1]:60544 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 03:18:52 2026] [::1]:60544 Closing
+[Tue Sep  8 03:18:52 2026] [::1]:60560 [200]: GET /logo.jpg
+[Tue Sep  8 03:18:52 2026] [::1]:60560 Closing
+[Tue Sep  8 03:18:53 2026] [::1]:54104 Accepted
+[Tue Sep  8 03:18:53 2026] [::1]:54104 [302]: POST /index.php
+[Tue Sep  8 03:18:53 2026] [::1]:54104 Closing
+[Tue Sep  8 03:18:53 2026] [::1]:54110 Accepted
+[Tue Sep  8 03:18:53 2026] [::1]:54110 [200]: GET /admin_dashboard.php
+[Tue Sep  8 03:18:53 2026] [::1]:54110 Closing
+[Tue Sep  8 03:18:53 2026] [::1]:54122 Accepted
+[Tue Sep  8 03:18:53 2026] [::1]:54132 Accepted
+[Tue Sep  8 03:18:53 2026] [::1]:54122 [404]: GET /css/admin_dashboard.css - No such file or directory
+[Tue Sep  8 03:18:53 2026] [::1]:54122 Closing
+[Tue Sep  8 03:18:53 2026] [::1]:54132 [200]: GET /logo.jpg
+[Tue Sep  8 03:18:53 2026] [::1]:54132 Closing
+[Tue Sep  8 03:18:54 2026] [::1]:54136 Accepted
+[Tue Sep  8 03:18:54 2026] [::1]:54136 [200]: GET /sw.js
+[Tue Sep  8 03:18:54 2026] [::1]:54136 Closing
+[Tue Sep  8 03:18:54 2026] [::1]:54152 Accepted
+[Tue Sep  8 03:18:54 2026] [::1]:54164 Accepted
+[Tue Sep  8 03:18:54 2026] [::1]:54174 Accepted
+[Tue Sep  8 03:18:54 2026] [::1]:54152 [200]: GET /
+[Tue Sep  8 03:18:54 2026] [::1]:54152 Closing
+[Tue Sep  8 03:18:54 2026] [::1]:54164 [200]: GET /index.php
+[Tue Sep  8 03:18:54 2026] [::1]:54164 Closing
+[Tue Sep  8 03:18:54 2026] [::1]:54174 [200]: GET /manifest.json
+[Tue Sep  8 03:18:54 2026] [::1]:54174 Closing
+[Tue Sep  8 03:18:54 2026] [::1]:54186 Accepted
+[Tue Sep  8 03:18:54 2026] [::1]:54186 [200]: GET /logo.jpg
+[Tue Sep  8 03:18:54 2026] [::1]:54186 Closing
+[Tue Sep  8 03:18:54 2026] [::1]:54196 Accepted
+[Tue Sep  8 03:18:54 2026] [::1]:54204 Accepted
+[Tue Sep  8 03:18:54 2026] [::1]:54196 [404]: GET /css/user_dashboard.css - No such file or directory
+[Tue Sep  8 03:18:54 2026] [::1]:54196 Closing
+[Tue Sep  8 03:18:54 2026] [::1]:54210 Accepted
+[Tue Sep  8 03:18:54 2026] [::1]:54204 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 03:18:54 2026] [::1]:54204 Closing
+[Tue Sep  8 03:18:54 2026] [::1]:54212 Accepted
+[Tue Sep  8 03:18:54 2026] [::1]:54222 Accepted
+[Tue Sep  8 03:18:54 2026] [::1]:54234 Accepted
+[Tue Sep  8 03:18:54 2026] [::1]:54240 Accepted
+[Tue Sep  8 03:18:54 2026] [::1]:54246 Accepted
+[Tue Sep  8 03:18:56 2026] [::1]:54210 [200]: POST /admin_dashboard.php
+[Tue Sep  8 03:18:56 2026] [::1]:54210 Closing
+[Tue Sep  8 03:18:56 2026] [::1]:54212 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:18:56 2026] [::1]:54212 Closing
+[Tue Sep  8 03:18:56 2026] [::1]:54234 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:18:56 2026] [::1]:54234 Closing
+[Tue Sep  8 03:18:57 2026] [::1]:54240 [200]: GET /admin_dashboard.php
+[Tue Sep  8 03:18:57 2026] [::1]:54240 Closing
+[Tue Sep  8 03:18:57 2026] [::1]:54246 [404]: GET /css/admin_dashboard.css - No such file or directory
+[Tue Sep  8 03:18:57 2026] [::1]:54246 Closing
+[Tue Sep  8 03:18:57 2026] [::1]:54222 [200]: GET /logo.jpg
+[Tue Sep  8 03:18:57 2026] [::1]:54222 Closing
+[Tue Sep  8 03:18:59 2026] [::1]:54262 Accepted
+[Tue Sep  8 03:18:59 2026] [::1]:54262 [200]: GET /sw.js
+[Tue Sep  8 03:18:59 2026] [::1]:54262 Closing
+[Tue Sep  8 03:19:02 2026] [::1]:54278 Accepted
+[Tue Sep  8 03:19:02 2026] [::1]:54292 Accepted
+[Tue Sep  8 03:19:02 2026] [::1]:54278 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:19:02 2026] [::1]:54278 Closing
+[Tue Sep  8 03:19:02 2026] [::1]:54292 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:19:02 2026] [::1]:54292 Closing
+[Tue Sep  8 03:19:07 2026] [::1]:37766 Accepted
+[Tue Sep  8 03:19:07 2026] [::1]:37770 Accepted
+[Tue Sep  8 03:19:07 2026] [::1]:37766 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:19:07 2026] [::1]:37766 Closing
+[Tue Sep  8 03:19:07 2026] [::1]:37770 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:19:07 2026] [::1]:37770 Closing
+[Tue Sep  8 03:19:12 2026] [::1]:37782 Accepted
+[Tue Sep  8 03:19:12 2026] [::1]:37786 Accepted
+[Tue Sep  8 03:19:12 2026] [::1]:37782 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:19:12 2026] [::1]:37782 Closing
+[Tue Sep  8 03:19:12 2026] [::1]:37786 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:19:12 2026] [::1]:37786 Closing
+[Tue Sep  8 03:19:17 2026] [::1]:49876 Accepted
+[Tue Sep  8 03:19:17 2026] [::1]:49878 Accepted
+[Tue Sep  8 03:19:17 2026] [::1]:49876 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:19:17 2026] [::1]:49876 Closing
+[Tue Sep  8 03:19:17 2026] [::1]:49878 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:19:17 2026] [::1]:49878 Closing
+[Tue Sep  8 03:19:22 2026] [::1]:49890 Accepted
+[Tue Sep  8 03:19:22 2026] [::1]:49892 Accepted
+[Tue Sep  8 03:19:22 2026] [::1]:49890 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:19:22 2026] [::1]:49890 Closing
+[Tue Sep  8 03:19:22 2026] [::1]:49892 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:19:22 2026] [::1]:49892 Closing
+[Tue Sep  8 03:19:27 2026] [::1]:40546 Accepted
+[Tue Sep  8 03:19:27 2026] [::1]:40560 Accepted
+[Tue Sep  8 03:19:27 2026] [::1]:40546 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:19:27 2026] [::1]:40546 Closing
+[Tue Sep  8 03:19:27 2026] [::1]:40560 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:19:27 2026] [::1]:40560 Closing
+[Tue Sep  8 03:20:18 2026] [::1]:58450 Accepted
+[Tue Sep  8 03:20:18 2026] [::1]:58450 [200]: GET /index.php
+[Tue Sep  8 03:20:18 2026] [::1]:58450 Closing
+[Tue Sep  8 03:20:18 2026] [::1]:58460 Accepted
+[Tue Sep  8 03:20:18 2026] [::1]:58472 Accepted
+[Tue Sep  8 03:20:18 2026] [::1]:58460 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 03:20:18 2026] [::1]:58460 Closing
+[Tue Sep  8 03:20:18 2026] [::1]:58472 [200]: GET /logo.jpg
+[Tue Sep  8 03:20:18 2026] [::1]:58472 Closing
+[Tue Sep  8 03:20:20 2026] [::1]:58480 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58480 [302]: POST /index.php
+[Tue Sep  8 03:20:20 2026] [::1]:58480 Closing
+[Tue Sep  8 03:20:20 2026] [::1]:58494 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58494 [200]: GET /admin_dashboard.php
+[Tue Sep  8 03:20:20 2026] [::1]:58494 Closing
+[Tue Sep  8 03:20:20 2026] [::1]:58498 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58512 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58498 [404]: GET /css/admin_dashboard.css - No such file or directory
+[Tue Sep  8 03:20:20 2026] [::1]:58498 Closing
+[Tue Sep  8 03:20:20 2026] [::1]:58512 [200]: GET /logo.jpg
+[Tue Sep  8 03:20:20 2026] [::1]:58512 Closing
+[Tue Sep  8 03:20:20 2026] [::1]:58528 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58528 [200]: GET /sw.js
+[Tue Sep  8 03:20:20 2026] [::1]:58528 Closing
+[Tue Sep  8 03:20:20 2026] [::1]:58532 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58542 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58532 [200]: GET /
+[Tue Sep  8 03:20:20 2026] [::1]:58532 Closing
+[Tue Sep  8 03:20:20 2026] [::1]:58544 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58542 [200]: GET /index.php
+[Tue Sep  8 03:20:20 2026] [::1]:58542 Closing
+[Tue Sep  8 03:20:20 2026] [::1]:58544 [200]: GET /manifest.json
+[Tue Sep  8 03:20:20 2026] [::1]:58544 Closing
+[Tue Sep  8 03:20:20 2026] [::1]:58548 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58548 [200]: GET /logo.jpg
+[Tue Sep  8 03:20:20 2026] [::1]:58548 Closing
+[Tue Sep  8 03:20:20 2026] [::1]:58560 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58564 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58560 [404]: GET /css/user_dashboard.css - No such file or directory
+[Tue Sep  8 03:20:20 2026] [::1]:58560 Closing
+[Tue Sep  8 03:20:20 2026] [::1]:58564 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 03:20:20 2026] [::1]:58564 Closing
+[Tue Sep  8 03:20:20 2026] [::1]:58568 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58580 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58582 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58596 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58600 Accepted
+[Tue Sep  8 03:20:20 2026] [::1]:58616 Accepted
+[Tue Sep  8 03:20:23 2026] [::1]:58568 [200]: POST /admin_dashboard.php
+[Tue Sep  8 03:20:23 2026] [::1]:58568 Closing
+[Tue Sep  8 03:20:23 2026] [::1]:58580 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:20:23 2026] [::1]:58580 Closing
+[Tue Sep  8 03:20:23 2026] [::1]:58582 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:20:23 2026] [::1]:58582 Closing
+[Tue Sep  8 03:20:24 2026] [::1]:58596 [200]: GET /admin_dashboard.php
+[Tue Sep  8 03:20:24 2026] [::1]:58596 Closing
+[Tue Sep  8 03:20:24 2026] [::1]:58600 [404]: GET /css/admin_dashboard.css - No such file or directory
+[Tue Sep  8 03:20:24 2026] [::1]:58600 Closing
+[Tue Sep  8 03:20:24 2026] [::1]:58616 [200]: GET /logo.jpg
+[Tue Sep  8 03:20:24 2026] [::1]:58616 Closing
+[Tue Sep  8 03:20:26 2026] [::1]:52188 Accepted
+[Tue Sep  8 03:20:26 2026] [::1]:52188 [200]: GET /sw.js
+[Tue Sep  8 03:20:26 2026] [::1]:52188 Closing
+[Tue Sep  8 03:20:26 2026] [::1]:52194 Accepted
+[Tue Sep  8 03:20:26 2026] [::1]:52194 [200]: GET /user_schedule.php
+[Tue Sep  8 03:20:26 2026] [::1]:52194 Closing
+[Tue Sep  8 03:20:26 2026] [::1]:52198 Accepted
+[Tue Sep  8 03:20:26 2026] [::1]:52214 Accepted
+[Tue Sep  8 03:20:26 2026] [::1]:52198 [404]: GET /css/request_history.css - No such file or directory
+[Tue Sep  8 03:20:26 2026] [::1]:52198 Closing
+[Tue Sep  8 03:20:26 2026] [::1]:52214 [200]: GET /logo.jpg
+[Tue Sep  8 03:20:26 2026] [::1]:52214 Closing
+[Tue Sep  8 03:21:00 2026] [::1]:36752 Accepted
+[Tue Sep  8 03:21:00 2026] [::1]:36752 [200]: GET /index.php
+[Tue Sep  8 03:21:00 2026] [::1]:36752 Closing
+[Tue Sep  8 03:21:00 2026] [::1]:36768 Accepted
+[Tue Sep  8 03:21:00 2026] [::1]:36782 Accepted
+[Tue Sep  8 03:21:00 2026] [::1]:36768 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 03:21:00 2026] [::1]:36768 Closing
+[Tue Sep  8 03:21:00 2026] [::1]:36782 [200]: GET /logo.jpg
+[Tue Sep  8 03:21:00 2026] [::1]:36782 Closing
+[Tue Sep  8 03:21:01 2026] [::1]:36796 Accepted
+[Tue Sep  8 03:21:01 2026] [::1]:36796 [302]: POST /index.php
+[Tue Sep  8 03:21:01 2026] [::1]:36796 Closing
+[Tue Sep  8 03:21:01 2026] [::1]:36804 Accepted
+[Tue Sep  8 03:21:01 2026] [::1]:36804 [200]: GET /admin_dashboard.php
+[Tue Sep  8 03:21:01 2026] [::1]:36804 Closing
+[Tue Sep  8 03:21:01 2026] [::1]:36812 Accepted
+[Tue Sep  8 03:21:01 2026] [::1]:36814 Accepted
+[Tue Sep  8 03:21:01 2026] [::1]:36812 [404]: GET /css/admin_dashboard.css - No such file or directory
+[Tue Sep  8 03:21:01 2026] [::1]:36812 Closing
+[Tue Sep  8 03:21:01 2026] [::1]:36814 [200]: GET /logo.jpg
+[Tue Sep  8 03:21:01 2026] [::1]:36814 Closing
+[Tue Sep  8 03:21:01 2026] [::1]:36824 Accepted
+[Tue Sep  8 03:21:01 2026] [::1]:36824 [200]: GET /sw.js
+[Tue Sep  8 03:21:01 2026] [::1]:36824 Closing
+[Tue Sep  8 03:21:02 2026] [::1]:36834 Accepted
+[Tue Sep  8 03:21:02 2026] [::1]:36844 Accepted
+[Tue Sep  8 03:21:02 2026] [::1]:36850 Accepted
+[Tue Sep  8 03:21:02 2026] [::1]:36834 [200]: GET /
+[Tue Sep  8 03:21:02 2026] [::1]:36834 Closing
+[Tue Sep  8 03:21:02 2026] [::1]:36844 [200]: GET /index.php
+[Tue Sep  8 03:21:02 2026] [::1]:36844 Closing
+[Tue Sep  8 03:21:02 2026] [::1]:36850 [200]: GET /manifest.json
+[Tue Sep  8 03:21:02 2026] [::1]:36854 Accepted
+[Tue Sep  8 03:21:02 2026] [::1]:36854 [200]: GET /logo.jpg
+[Tue Sep  8 03:21:02 2026] [::1]:36850 Closing
+[Tue Sep  8 03:21:02 2026] [::1]:36854 Closing
+[Tue Sep  8 03:21:02 2026] [::1]:36856 Accepted
+[Tue Sep  8 03:21:02 2026] [::1]:36858 Accepted
+[Tue Sep  8 03:21:02 2026] [::1]:36856 [404]: GET /css/user_dashboard.css - No such file or directory
+[Tue Sep  8 03:21:02 2026] [::1]:36866 Accepted
+[Tue Sep  8 03:21:02 2026] [::1]:36856 Closing
+[Tue Sep  8 03:21:02 2026] [::1]:36858 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 03:21:02 2026] [::1]:36858 Closing
+[Tue Sep  8 03:21:02 2026] [::1]:36866 [404]: GET /css/admin_dashboard.css - No such file or directory
+[Tue Sep  8 03:21:02 2026] [::1]:36866 Closing
+[Tue Sep  8 03:21:02 2026] [::1]:36880 Accepted
+[Tue Sep  8 03:21:02 2026] [::1]:36896 Accepted
+[Tue Sep  8 03:21:02 2026] [::1]:36898 Accepted
+[Tue Sep  8 03:21:02 2026] [::1]:36908 Accepted
+[Tue Sep  8 03:21:02 2026] [::1]:36916 Accepted
+[Tue Sep  8 03:21:02 2026] [::1]:36926 Accepted
+[Tue Sep  8 03:21:04 2026] [::1]:36880 [200]: POST /admin_dashboard.php
+[Tue Sep  8 03:21:04 2026] [::1]:36880 Closing
+[Tue Sep  8 03:21:04 2026] [::1]:36896 [200]: GET /admin_dashboard.php?fetch_requests=1&type=office
+[Tue Sep  8 03:21:04 2026] [::1]:36896 Closing
+[Tue Sep  8 03:21:04 2026] [::1]:36898 [200]: GET /admin_dashboard.php?fetch_requests=1&type=maintenance
+[Tue Sep  8 03:21:04 2026] [::1]:36898 Closing
+[Tue Sep  8 03:21:05 2026] [::1]:36908 [200]: GET /admin_dashboard.php
+[Tue Sep  8 03:21:05 2026] [::1]:36908 Closing
+[Tue Sep  8 03:21:05 2026] [::1]:36916 [404]: GET /css/admin_dashboard.css - No such file or directory
+[Tue Sep  8 03:21:05 2026] [::1]:36916 Closing
+[Tue Sep  8 03:21:05 2026] [::1]:36926 [200]: GET /logo.jpg
+[Tue Sep  8 03:21:05 2026] [::1]:36926 Closing
+[Tue Sep  8 03:21:07 2026] [::1]:59852 Accepted
+[Tue Sep  8 03:21:07 2026] [::1]:59852 [200]: GET /user_schedule.php
+[Tue Sep  8 03:21:07 2026] [::1]:59852 Closing
+[Tue Sep  8 03:21:07 2026] [::1]:59854 Accepted
+[Tue Sep  8 03:21:07 2026] [::1]:59860 Accepted
+[Tue Sep  8 03:21:07 2026] [::1]:59854 [404]: GET /css/request_history.css - No such file or directory
+[Tue Sep  8 03:21:07 2026] [::1]:59854 Closing
+[Tue Sep  8 03:21:07 2026] [::1]:59876 Accepted
+[Tue Sep  8 03:21:07 2026] [::1]:59860 [200]: GET /logo.jpg
+[Tue Sep  8 03:21:07 2026] [::1]:59860 Closing
+[Tue Sep  8 03:21:07 2026] [::1]:59876 [200]: GET /sw.js
+[Tue Sep  8 03:21:07 2026] [::1]:59876 Closing
+[Tue Sep  8 03:21:10 2026] [::1]:59886 Accepted
+[Tue Sep  8 03:21:10 2026] [::1]:59886 [200]: GET /sw.js
+[Tue Sep  8 03:21:10 2026] [::1]:59886 Closing
+[Tue Sep  8 05:01:02 2026] [::1]:55760 Accepted
+[Tue Sep  8 05:01:02 2026] [::1]:55760 [200]: GET /index.php
+[Tue Sep  8 05:01:02 2026] [::1]:55760 Closing
+[Tue Sep  8 05:01:02 2026] [::1]:55768 Accepted
+[Tue Sep  8 05:01:02 2026] [::1]:55778 Accepted
+[Tue Sep  8 05:01:02 2026] [::1]:55768 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 05:01:02 2026] [::1]:55768 Closing
+[Tue Sep  8 05:01:02 2026] [::1]:55778 [200]: GET /logo.jpg
+[Tue Sep  8 05:01:02 2026] [::1]:55778 Closing
+[Tue Sep  8 05:01:04 2026] [::1]:55780 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55780 [302]: POST /index.php
+[Tue Sep  8 05:01:04 2026] [::1]:55780 Closing
+[Tue Sep  8 05:01:04 2026] [::1]:55782 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55782 [200]: GET /admin_dashboard.php
+[Tue Sep  8 05:01:04 2026] [::1]:55782 Closing
+[Tue Sep  8 05:01:04 2026] [::1]:55790 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55802 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55790 [404]: GET /css/admin_dashboard.css - No such file or directory
+[Tue Sep  8 05:01:04 2026] [::1]:55790 Closing
+[Tue Sep  8 05:01:04 2026] [::1]:55802 [200]: GET /logo.jpg
+[Tue Sep  8 05:01:04 2026] [::1]:55802 Closing
+[Tue Sep  8 05:01:04 2026] [::1]:55808 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55808 [200]: GET /sw.js
+[Tue Sep  8 05:01:04 2026] [::1]:55808 Closing
+[Tue Sep  8 05:01:04 2026] [::1]:55810 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55816 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55828 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55810 [200]: GET /
+[Tue Sep  8 05:01:04 2026] [::1]:55810 Closing
+[Tue Sep  8 05:01:04 2026] [::1]:55816 [200]: GET /index.php
+[Tue Sep  8 05:01:04 2026] [::1]:55816 Closing
+[Tue Sep  8 05:01:04 2026] [::1]:55828 [200]: GET /manifest.json
+[Tue Sep  8 05:01:04 2026] [::1]:55828 Closing
+[Tue Sep  8 05:01:04 2026] [::1]:55844 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55854 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55856 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55844 [200]: GET /logo.jpg
+[Tue Sep  8 05:01:04 2026] [::1]:55844 Closing
+[Tue Sep  8 05:01:04 2026] [::1]:55854 [404]: GET /css/user_dashboard.css - No such file or directory
+[Tue Sep  8 05:01:04 2026] [::1]:55854 Closing
+[Tue Sep  8 05:01:04 2026] [::1]:55856 [404]: GET /css/index.css - No such file or directory
+[Tue Sep  8 05:01:04 2026] [::1]:55856 Closing
+[Tue Sep  8 05:01:04 2026] [::1]:55864 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55866 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55870 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55872 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55882 Accepted
+[Tue Sep  8 05:01:04 2026] [::1]:55894 Accepted
+[Tue Sep  8 05:01:05 2026] [::1]:55864 [200]: GET /user_schedule.php
+[Tue Sep  8 05:01:05 2026] [::1]:55864 Closing
+[Tue Sep  8 05:01:05 2026] [::1]:55866 [404]: GET /css/request_history.css - No such file or directory
+[Tue Sep  8 05:01:05 2026] [::1]:55866 Closing
+[Tue Sep  8 05:01:05 2026] [::1]:55870 [200]: GET /logo.jpg
+[Tue Sep  8 05:01:05 2026] [::1]:55870 Closing
+[Tue Sep  8 05:01:07 2026] [::1]:55872 [200]: GET /sw.js
+[Tue Sep  8 05:01:07 2026] [::1]:55872 Closing
+[Tue Sep  8 05:01:09 2026] [::1]:55882 Closed without sending a request; it was probably just an unused speculative preconnection
+[Tue Sep  8 05:01:09 2026] [::1]:55882 Closing
+[Tue Sep  8 05:01:09 2026] [::1]:55894 Closed without sending a request; it was probably just an unused speculative preconnection
+[Tue Sep  8 05:01:09 2026] [::1]:55894 Closing
